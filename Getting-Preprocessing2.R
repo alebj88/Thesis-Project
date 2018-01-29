@@ -6,7 +6,7 @@ library(ggmap)
 
 setwd("~/Thesis Project/R-Scripts")
 source('Functions.R')
-dev.off()
+#dev.off()
 
 setwd("~/Thesis Project/Data/Pre-processed Data")
 cat("Importando tablas de la carpeta Pre-processed Data\n")
@@ -662,8 +662,8 @@ world$medida<-unname(sapply(world$medida,function(x){gsub("eA"," ",x)}))
 splits<-strsplit(world$medida,split=' ')
 world$medida<-sapply(splits,function(x){paste(x[-c(1,2,3,4)],collapse=" ")})
 aux<-sapply(splits,function(x){paste(x[c(1,2,3,4)],collapse=" ")})
-aux[aux=="#WOA13 1/4 degree ANNUAL"]<-"1/4ºAnnual"
-aux[aux!="#WOA13 1/4 degree ANNUAL"]<-"1ºAnnual"
+aux[aux=="#WOA13 1/4 degree ANNUAL"]<-"1/4ÂºAnnual"
+aux[aux!="#WOA13 1/4 degree ANNUAL"]<-"1ÂºAnnual"
 
 world$medida<-paste(world$medida,aux,sep=" ")
 
@@ -729,7 +729,7 @@ world<-merge(world,corrientesAux,by="clave2",all.x=TRUE)
 
 #Renombramos variables.
 names(world) <-unname(sapply(names(world),function(x){
-     gsub("1ºAnnual","",x)
+     gsub("1ÂºAnnual","",x)
 }))
 names(world)[11]<-"oxygen"
 names(world)[21]<-"phosphate"

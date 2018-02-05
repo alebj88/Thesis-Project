@@ -326,6 +326,9 @@ if(existe == TRUE){
     }
 }
 
+rm(list=ls())
+gc()
+
 cat("Procedimiento Processing-GIOVANNI.R finalizado.\n")
 cat("\n")
 cat("/////////////////////////////////////////////////\n")

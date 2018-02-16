@@ -6,7 +6,7 @@ library(ggmap)
 
 setwd("~/Thesis Project AB/R-Scripts")
 source('Functions.R')
-dev.off()
+#dev.off()
 
 setwd("~/Thesis Project AB/Data/Pre-processed Data")
 cat("Importando tablas de la carpeta Pre-processed Data\n")

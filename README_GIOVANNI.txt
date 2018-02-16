@@ -1,4 +1,4 @@
-Para incluir en la matriz ambiental los datos de las variables provenientes de la p·gina 
+Para incluir en la matriz ambiental los datos de las variables provenientes de la p√°gina 
 https://giovanni.gsfc.nasa.gov se deben considera las siguientes especificaciones:
 
 
@@ -15,7 +15,7 @@ entre las latitudes 8 y 17 grados norte y las longitudes 60 y 73 grados oeste. (
 Por cada variable solicidada se debe descargar la imagen generada en formato PNG y 
 copiarla dentro de la carpeta "~/Thesis Project AB/Data/Raw Data/Giovanni". Es importante 
 desactivar las casillas de "Supporting Overlays" y activar las de "Decorations" dentro de 
-de la pestaÒa "Layers" de la p·gina antes de realizar la descarga. Dejar el resto de las opciones 
+de la pesta√±a "Layers" de la p√°gina antes de realizar la descarga. Dejar el resto de las opciones 
 predefinidas.
 
 Para graficos estilo "Animation":
@@ -27,12 +27,12 @@ Descargar el archivo ZIP, descomprimirlo y copiar la carpeta con las imagenes PN
 3) Para graficos estilo "Time Averaged Map" o "Monthly and Seasonal Averages" Se deben reescribir
 los nombres de los archivo PNG y darles el siguiente formato:
 
-TipoDeGrafico_NombreDeLaVariable_unidadDeMedicion_RangoDeFechas.png
+NombreDeLaVariable_unidadDeMedicion_RangoDeFechas.png
 
 Para los archivos estilo "Animation" basta reescribir el nombre de la carpeta que los contiene en
 el formato solicitado. Las imagenes en su interior copiaran el nombre de la carpeta donde estan.
 
-Observacion: Cada una de las palabras entre los "_" debe contener solamente n˙meros y letras.
+Observacion: Cada una de las palabras entre los "_" debe contener solamente n√∫meros y letras.
 
 Para el rango de fechas usar:
 - El formato DDMMYYYY si es una sola.
@@ -41,10 +41,10 @@ Para el rango de fechas usar:
 Ejemplo:
 
 Para "Time Averaged Map" o "Monthly and Seasonal Averages":
-TimeAverageMap_OxigenoDisuelto_MicromolesPorLitro_0101199504042017.png  
+OxigenoDisuelto_MicromolesPorLitro_0101199504042017.png  
 
 Para "Animation":
-TimeAverageMap_OxigenoDisuelto_MicromolesPorLitro_0101199504042017	(Es un directorio.)	
+OxigenoDisuelto_MicromolesPorLitro_0101199504042017	(Es un directorio.)	
 
 Para procesar las imagenes de Giovanni se debe correr el codigo "ejecutable.R" cada vez que se 
 incluyan mapas nuevos a la carpeta "~/Thesis Project AB/Raw Data/Giovanni" y se deseen agregar a la 

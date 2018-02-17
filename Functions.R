@@ -340,7 +340,7 @@ numTopred <-function(num){
 #oxigenoDisuelto_promedio_micromolesPorLitro_0101199504042017.png
 
 procesamientoDeImagenes <-function(imagPNG,newDir=FALSE,pathPPD="",HT=TRUE,nSet=FALSE){
-    setwd("~/");imagPNG <-"pruebadem.png";newDir<-TRUE
+    #setwd("~/");imagPNG <-"pruebadem.png";newDir<-TRUE
     img <-readPNG(imagPNG)
     nombre <-strsplit(imagPNG,split="\\.")[[1]][1]
 

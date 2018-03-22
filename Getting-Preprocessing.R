@@ -5,7 +5,7 @@ library(grDevices)
 library(ff)
 library(ffbase)
 #library(bigmemory)
-options(noaakey = "YDPCMrBIaxjsPZzSPrBlGeziseeHcOWn")
+
 
 setwd("~/Thesis Project AB/R-Scripts")
 source('Functions.R')	
@@ -608,7 +608,7 @@ gc()
 
 #///////////////////////////////////////////////////////////////////////////////
 #Oceanographic physical and chemical profile data from bottle and CTD casts 
-#collected aboard the R/V Hermano Ginés in Southeastern Caribbean Sea from
+#collected aboard the R/V Hermano GinÃ©s in Southeastern Caribbean Sea from
 #2014-04-11 to 2015-07-29 (NCEI Accession 0139312)
 #ftp://ftp.nodc.noaa.gov/nodc/archive/arc0082/0139312/1.1/
 setwd("~/Thesis Project AB/Data/Raw Data")

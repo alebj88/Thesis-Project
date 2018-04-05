@@ -5,7 +5,7 @@ library(grDevices)
 library(ff)
 library(ffbase)
 #library(bigmemory)
-options(noaakey = "YDPCMrBIaxjsPZzSPrBlGeziseeHcOWn"); NOAAkey <- TRUE
+
 
 setwd("~/Thesis Project AB/R-Scripts")
 source('Functions.R')	

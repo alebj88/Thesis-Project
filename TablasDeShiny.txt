@@ -1,0 +1,17 @@
+Para construir las tablas DataCoralesProcMan.csv y DataCoralesProcMan2.csv se procede de la siguiente forma.
+
+Correr en modo source el codigo Ejecutable.R e indicar que se desean agregar datos ambientales al archivo DataCorales.csv
+Seleccionar la tabla WorldOceanographicAtlas.csv y especificar los radios de busqueda en 10, 120 y 400 kilometros. 
+Incluir todas las variables existentes y continuar.
+
+Una vez finalizado el procedimiento, correr en modo source el codigo Ejecutable.R de nuevo. Indicar que se desean agregar
+datos ambientales al archivo DataCorales_proc1.csv y seleccionar la tabla de datos de Google Earth.
+
+Se deben establecer 15km de distancia en kilometros y 7dias de viaje en corrientes. Solicitar que se agregen exclusivamente
+las variables objeto.t, objeto.d, Tiempo.en.Corriente.dias, y Distancia.Euclidea.kms, y continuar.
+
+Una vez finalizado el procedimiento renombrar el archivo DataCorales_proc1_proc1.csv, que se habra generado en la carpeta
+Process Data, como DataCoralesProcMan.csv y agregarlo en el directorio ShinyExploratory ubicado en Shiny Apps. 
+
+El archivo DataCoralesProcMan2.csv se crea posteriormente ejecutando el codigo DataCoralesProcMan_Const.R alojado en la misma
+carpeta ShinyExploratory.

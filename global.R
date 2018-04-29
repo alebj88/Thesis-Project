@@ -49,7 +49,7 @@ varDepNum <- c("Tiempo.en.Corriente.dias","Distancia.Euclidea.kms",varDepNum)
 #CLASIFICACION /////////////////////////////////////////////////////////////////
 
 #Creamos dataset biologico sin NA's.
-MatrizBiologica2 <- read.csv("DataCoralesProcMan.csv")
+MatrizBiologica2 <- read.csv("DataCoralesProcMan2.csv")
 
 #Chequeo de porcentaje de NA's por variable.
 #apply(MatrizBiologica2,2,function(x)sum(is.na(x))/length(x)*100)

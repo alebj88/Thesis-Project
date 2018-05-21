@@ -74,11 +74,12 @@ Descargar el archivo ZIP, descomprimirlo y copiar la carpeta con las imagenes PN
 "~/Thesis Project AB/Data/Raw Data/Giovanni".Dejar las opciones del mapa establecidas por defecto.
 
 El nombre de la variable medida en el CSV sera tomada del nombre del mapa. Se recomienda asignarle 
-al mapa un nombre corto que represente bien la variable que mide.
+al mapa un nombre corto que represente bien la variable que mide.  EL NOMBRE NO DEBE TENER PUNTOS,
+haga las separaciones entre variables con "_".
 
 Ejemplo:
 
-salinidad.png  
+salinidad_max.png  
 
 4.2)  Para graficos estilo "Animation":
 
@@ -92,12 +93,12 @@ de frontera de cada mapa particular.
 
 El nombre la variable medida en el CSV sera tomada del nombre de la carpeta que contiene el conjunto de
 imagenes "Animation". Se recomienda asignarle a la carpeta un nombre corto que represente bien la variable 
-que miden sus imagenes.
+que miden sus imagenes. EL NOMBRE NO DEBE TENER PUNTOS, haga las separaciones entre variables con "_".
 
 
 Ejemplo:
 
-OxigenoDisuelto    		(Es un directorio)	
+OxigenoDisuelto_Min    		(Es un directorio)	
 
 
 Para ejecutar el procesamiento de las imagenes de Giovanni se debe correr el codigo "Proyecto.R" 

@@ -1,0 +1,2184 @@
+---
+title:    "Diagramas de Dispersión Variables Oceanográficas"
+subtitle: "Clasificadores de Localidad"
+author:   "Alejandro Bravo. Carnet: 14-89834"
+date:     "12 de febrero de 2019"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 12,fig.height = 6,fig.align ="center")
+knitr::opts_chunk$set(warning = FALSE)	
+knitr::opts_chunk$set(message = FALSE)	
+```
+
+##Resumen 
+
+El presente informe tiene como objetivo mostrar las relaciones existentes entre las variables oceanográficas del estudio.   
+
+
+
+```{r Ini}
+library(ggplot2)
+
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/BenthicSubstrate_Matrix.csv")
+
+#Creamos variable dependiente
+DataSet$Ubicacion <- paste(DataSet$Locality,DataSet$Site,sep="-") 
+
+#Transformamos 999's en 120's en las variables de Google Earth
+for(k in 121:153){
+    DataSet[,k][DataSet[k][,1] == 999] <- rep(120,sum(DataSet[k][,1] == 999))
+}
+
+
+```
+
+Variables Geográficas:
+
+```{r prin1}
+#Variables Geograficas
+names(DataSet)[c(1:4,119,120,442)]
+
+```
+
+Variables Biológicas:
+
+```{r prin2}
+#Variables Biologicas
+names(DataSet)[5:118]
+
+```
+
+Variables Ambientales:
+
+```{r prin3}
+#Variables Ambientales
+names(DataSet)[121:447]
+
+```
+
+##Diagramas de Dispersión
+
+El criterio de selección de variables se realizará en función de las diferencias vistas entre los puntos de los gráficos en sentido vertical. El eje horizontal etiquetado con la palabra "Index", no es informativo y en consecuencia las distancias horizontales observadas son irrelevantes.
+
+En cuanto a los puntos de interés más cercanos a cada ubicación, aeropuertos, puertos, ríos, entre otros, se realizó una busqueda a un máximo de 100kms de distancia y 15 días de viaje en corriente. Todos los elementos que quedaron fuera de ese rango se consideraron poco influyentes y se les asignó el valor 999.
+
+
+```{r plots1}
+
+#BORRAR VALORES 999 EN LAS VARIABLES DE GOOGLE EARTH
+#TERMINAR EL CONKJUNTOS DE GRAFICOS
+
+#Posicion de las variables de interes (Las Ambientales)
+pos <- which(names(DataSet) == "Ubicacion")
+pos <- c(pos,121:(ncol(DataSet) - 1))
+
+#Subsetting
+df <- DataSet[pos]
+
+#Creamos indice
+df$Index <- 1:nrow(df)
+
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+
+```
+
+
+```{r plots2}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+```
+
+
+```{r plots3}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+```
+
+```{r plots4}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+```
+
+```{r plots5}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+```
+
+```{r plots6}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+ggplot(df,aes(Index,get(names(df)[29]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[29]) + 
+        ggtitle(names(df)[29])
+
+ggplot(df,aes(Index,get(names(df)[30]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[30]) + 
+        ggtitle(names(df)[30])
+
+
+
+ggplot(df,aes(Index,get(names(df)[31]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[31]) + 
+        ggtitle(names(df)[31])
+
+ggplot(df,aes(Index,get(names(df)[32]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[32]) + 
+        ggtitle(names(df)[32])
+
+ggplot(df,aes(Index,get(names(df)[33]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[33]) + 
+        ggtitle(names(df)[33])
+
+ggplot(df,aes(Index,get(names(df)[34]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[34]) + 
+        ggtitle(names(df)[34])
+
+ggplot(df,aes(Index,get(names(df)[35]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[35]) + 
+        ggtitle(names(df)[35])
+
+ggplot(df,aes(Index,get(names(df)[36]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[36]) + 
+        ggtitle(names(df)[36])
+
+ggplot(df,aes(Index,get(names(df)[37]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[37]) + 
+        ggtitle(names(df)[37])
+
+ggplot(df,aes(Index,get(names(df)[38]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[38]) + 
+        ggtitle(names(df)[38])
+
+ggplot(df,aes(Index,get(names(df)[39]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[39]) + 
+        ggtitle(names(df)[39])
+
+ggplot(df,aes(Index,get(names(df)[40]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[40]) + 
+        ggtitle(names(df)[40])
+
+
+
+ggplot(df,aes(Index,get(names(df)[41]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[41]) + 
+        ggtitle(names(df)[41])
+
+ggplot(df,aes(Index,get(names(df)[42]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[42]) + 
+        ggtitle(names(df)[42])
+
+ggplot(df,aes(Index,get(names(df)[43]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[43]) + 
+        ggtitle(names(df)[43])
+
+ggplot(df,aes(Index,get(names(df)[44]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[44]) + 
+        ggtitle(names(df)[44])
+
+ggplot(df,aes(Index,get(names(df)[45]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[45]) + 
+        ggtitle(names(df)[45])
+
+ggplot(df,aes(Index,get(names(df)[46]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[46]) + 
+        ggtitle(names(df)[46])
+
+ggplot(df,aes(Index,get(names(df)[47]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[47]) + 
+        ggtitle(names(df)[47])
+
+ggplot(df,aes(Index,get(names(df)[48]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[48]) + 
+        ggtitle(names(df)[48])
+
+ggplot(df,aes(Index,get(names(df)[49]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[49]) + 
+        ggtitle(names(df)[49])
+
+ggplot(df,aes(Index,get(names(df)[50]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[50]) + 
+        ggtitle(names(df)[50])
+
+ggplot(df,aes(Index,get(names(df)[51]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[51]) + 
+        ggtitle(names(df)[51])
+
+```
+
+```{r plots7}
+
+#Eliminando 
+df <- df[,-c(2:51)]
+
+ggplot(df,aes(Index,get(names(df)[2]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[2]) + 
+        ggtitle(names(df)[2])
+
+ggplot(df,aes(Index,get(names(df)[3]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[3]) + 
+        ggtitle(names(df)[3])
+
+ggplot(df,aes(Index,get(names(df)[4]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[4]) + 
+        ggtitle(names(df)[4])
+
+ggplot(df,aes(Index,get(names(df)[5]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[5]) + 
+        ggtitle(names(df)[5])
+
+ggplot(df,aes(Index,get(names(df)[6]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[6]) + 
+        ggtitle(names(df)[6])
+
+ggplot(df,aes(Index,get(names(df)[7]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[7]) + 
+        ggtitle(names(df)[7])
+
+ggplot(df,aes(Index,get(names(df)[8]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[8]) + 
+        ggtitle(names(df)[8])
+
+ggplot(df,aes(Index,get(names(df)[9]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[9]) + 
+        ggtitle(names(df)[9])
+
+ggplot(df,aes(Index,get(names(df)[10]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[10]) + 
+        ggtitle(names(df)[10])
+
+
+
+ggplot(df,aes(Index,get(names(df)[11]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[11]) + 
+        ggtitle(names(df)[11])
+
+ggplot(df,aes(Index,get(names(df)[12]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[12]) + 
+        ggtitle(names(df)[12])
+
+ggplot(df,aes(Index,get(names(df)[13]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[13]) + 
+        ggtitle(names(df)[13])
+
+ggplot(df,aes(Index,get(names(df)[14]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[14]) + 
+        ggtitle(names(df)[14])
+
+ggplot(df,aes(Index,get(names(df)[15]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[15]) + 
+        ggtitle(names(df)[15])
+
+ggplot(df,aes(Index,get(names(df)[16]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[16]) + 
+        ggtitle(names(df)[16])
+
+ggplot(df,aes(Index,get(names(df)[17]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[17]) + 
+        ggtitle(names(df)[17])
+
+ggplot(df,aes(Index,get(names(df)[18]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[18]) + 
+        ggtitle(names(df)[18])
+
+ggplot(df,aes(Index,get(names(df)[19]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[19]) + 
+        ggtitle(names(df)[19])
+
+ggplot(df,aes(Index,get(names(df)[20]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[20]) + 
+        ggtitle(names(df)[20])
+
+
+
+ggplot(df,aes(Index,get(names(df)[21]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[21]) + 
+        ggtitle(names(df)[21])
+
+ggplot(df,aes(Index,get(names(df)[22]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[22]) + 
+        ggtitle(names(df)[22])
+
+#Corrientes
+ggplot(df,aes(Index,get(names(df)[23]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[23]) + 
+        ggtitle(names(df)[23])
+
+ggplot(df,aes(Index,get(names(df)[24]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[24]) + 
+        ggtitle(names(df)[24])
+
+ggplot(df,aes(Index,get(names(df)[25]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[25]) + 
+        ggtitle(names(df)[25])
+
+ggplot(df,aes(Index,get(names(df)[26]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[26]) + 
+        ggtitle(names(df)[26])
+
+ggplot(df,aes(Index,get(names(df)[27]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[27]) + 
+        ggtitle(names(df)[27])
+
+ggplot(df,aes(Index,get(names(df)[28]),col = Ubicacion)) +
+        scale_color_discrete(name = "Ubicación") +
+        geom_point(size = 4) +
+        ylab(names(df)[28]) + 
+        ggtitle(names(df)[28])
+
+```
+
+##Descarte de Predictores
+
+Presentaremos una lista de las variables de Google Earth que podría ser descartadas por mostrar poca evidencia de ser útiles para diferenciar ubicaciones.
+
+```{r elim}
+
+#Posicion de las variables de interes (Las Ambientales)
+posElim <- which(names(DataSet) %in% c(
+    "Aeropuerto.t",
+    "Atracadero.t",
+    "Ciudad.t" , 
+    "Industria.Minera.d",
+    "Laguna.t",
+    "Petroquimica.t" ,
+    "Pueblo.t",
+    "Puerto.t", 
+    "Refineria.t",
+    "Salina.d",
+    "Salina.t",
+    "Termoelectrica.t",
+    "Zona.Hipoxica.d",
+    "Zona.Hipoxica.t"
+))
+
+pos <- which(names(DataSet) == "Ubicacion")
+df <- DataSet[c(posElim,pos)]
+
+names(df)[-ncol(df)]
+```

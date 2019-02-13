@@ -1,0 +1,400 @@
+---
+title:    "Diagramas de Dispersión Variables Demográficas"
+subtitle: "Clasificadores de Localidad"
+author: "Alejandro Bravo. Carnet: 14-89834"
+date:   "12 de febrero de 2019"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 12,fig.height = 12,fig.align ="center")
+knitr::opts_chunk$set(warning = FALSE)	
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(tidy = TRUE)
+```
+
+##Resumen 
+
+El presente informe tiene como objetivo mostrar las relaciones existentes entre las variables demográficas. 
+
+##Exploración 
+
+Lista de las variables a estudiar.
+
+```{r Ini}
+library(ggplot2)
+library(Hmisc)
+library(igraph)
+library(psych)
+library(MASS)
+
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/BenthicSubstrate_Matrix.csv")
+
+#Creamos variable dependiente
+DataSet$Ubicacion <- paste(DataSet$Locality,DataSet$Site,sep="-") 
+
+#Posicion de las variables previamente descartadas
+posElim <- which(names(DataSet) %in% c(
+    "Aeropuerto.t",
+    "Atracadero.t",
+    "Ciudad.t", 
+    "Industria.Minera.d",
+    "Laguna.t",
+    "Petroquimica.t" ,
+    "Pueblo.t",
+    "Puerto.t", 
+    "Refineria.t",
+    "Salina.d",
+    "Salina.t",
+    "Termoelectrica.t",
+    "Zona.Hipoxica.d",
+    "Zona.Hipoxica.t"
+))
+
+#Las eliminamos
+df <- DataSet[-posElim]
+
+#Removemos las que no seran evaluadas
+df <- df[121:139]
+
+#Transformamos 999's en 120 en las variables de Google Earth
+for(k in 1:ncol(df)){
+    df[,k][df[k][,1] == 999] <- rep(120,sum(df[k][,1] == 999))
+}
+
+names(df)
+
+```
+
+
+
+```{r prin1}
+tablaCor <- as.data.frame(cor(df, method="spearman"))
+tablaTest <- tablaCor
+
+```
+
+
+
+###Test de de independencia de Hoeffding. Método no paramétrico.
+
+Tabla de p-valores.  
+H0: Las variables son independientes.
+
+```{r prin3}
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaCor
+
+```
+
+###Pares de variables independientes
+
+```{r totalcorN}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaCor)){
+    tablaCor[i,i] <- 0
+}
+tablaCor <- abs(tablaCor) > 0.05
+posTrue <- which(tablaCor == TRUE)
+coln <- rep(colnames(tablaCor),each = dim(tablaCor)[1])
+rown <- rep(rownames(tablaCor),times = dim(tablaCor)[1])
+
+vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+vars
+
+```
+
+###Grafo para variables independientes
+
+```{r grainN}
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaCor[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+###Tabla de correlaciones entre variables. Método de Spearman.
+
+```{r totcor}
+tablaTest
+
+```
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r totalcorN2}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+vars
+
+```
+
+###Grafo para correlaciones altas
+
+```{r grainN2}
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:nrow(dfGraph)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+##Descarte de Predictores
+
+
+
+```{r elim}
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/BenthicSubstrate_Matrix.csv")
+
+#Posicion de las variables de interes (Las Ambientales)
+
+ElimVars <- c()
+
+posElim <- which(names(DataSet) %in% c(
+
+    "Atracadero.d",
+    "Pueblo.d",
+
+    "Refineria.d",
+    "Ciudad.d",
+
+    "Refineria.d",
+    "Petroquimica.d",
+    
+    "Puerto.d",
+    "Ciudad.d",
+
+    "Aeropuerto.d",
+    "Ciudad.d",
+
+    "Quebrada.Seca.d",
+    "Rio.Seco.d",
+    
+    "Canal.d",
+    "Quebrada.Seca.d",
+    
+    "Rio.d",
+    "Quebrada.Seca.d",
+    
+    "Rio.d",
+    "Rio.Seco.d",
+
+    "Rio.d",
+    "Canal.d"
+
+))
+
+pos <- which(names(DataSet) == "Locality")
+df <- DataSet[c(posElim,pos)]
+
+#Transformamos 999's en 120 en las variables de Google Earth
+for(k in 1:ncol(df)){
+    df[,k][df[k][,1] == 999] <- rep(120,sum(df[k][,1] == 999))
+}
+
+ElimVars
+
+```
+
+####Diagramas de dispersión de las variables señaladas.
+
+```{r plots1,fig.width = 8,fig.height = 6}
+
+#Dispersion
+
+v1 <- c("Atracadero.d","Pueblo.d")
+v6 <- c("Refineria.d","Ciudad.d")
+v7 <- c("Refineria.d","Petroquimica.d")
+v8 <- c("Puerto.d","Ciudad.d")
+v9 <- c("Aeropuerto.d","Ciudad.d")
+
+v2 <- c("Quebrada.Seca.d","Rio.Seco.d")
+v3 <- c("Canal.d","Quebrada.Seca.d")
+v4 <- c("Rio.d","Quebrada.Seca.d")
+v5 <- c("Rio.d","Rio.Seco.d")
+v10 <- c("Rio.d","Canal.d")
+
+df$Locality <- DataSet$Locality
+
+#Dispersion
+
+ggplot(df,aes(get(v1[1]),get(v1[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v1[1]) +
+    ylab(v1[2]) +
+    ggtitle(paste0("Evaluación"))
+
+
+ggplot(df,aes(get(v2[1]),get(v2[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v2[1]) +
+    ylab(v2[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v3[1]),get(v3[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v3[1]) +
+    ylab(v3[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v4[1]),get(v4[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v4[1]) +
+    ylab(v4[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v5[1]),get(v5[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v5[1]) +
+    ylab(v5[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v6[1]),get(v6[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v6[1]) +
+    ylab(v6[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v7[1]),get(v7[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v7[1]) +
+    ylab(v7[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v8[1]),get(v8[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v8[1]) +
+    ylab(v8[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v9[1]),get(v9[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v9[1]) +
+    ylab(v9[2]) +
+    ggtitle(paste0("Evaluación"))
+
+ggplot(df,aes(get(v10[1]),get(v10[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v10[1]) +
+    ylab(v10[2]) +
+    ggtitle(paste0("Evaluación"))
+
+df$Locality <-NULL
+
+
+
+```
+

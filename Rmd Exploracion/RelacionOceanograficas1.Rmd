@@ -1,0 +1,2111 @@
+---
+title:    "Relaciones entre Variables Ambientales"
+subtitle: "Correlaciones y Gráficos de Dispersión."
+author: "Alejandro Bravo. Carnet: 14-89834"
+date:   "12 de febrero de 2019"
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 12,fig.height = 12,fig.align ="center")
+knitr::opts_chunk$set(warning = FALSE)	
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(tidy = TRUE)
+
+```
+
+##Resumen 
+
+El presente informe tiene como objetivo mostrar las relaciones existentes entre las variables ambientales con la finalidad de detectar colinealidad entre predictores. 
+
+
+```{r Ini}
+library(ggplot2)
+library(Hmisc)
+library(igraph)
+library(psych)
+library(MASS)
+
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/BenthicSubstrate_Matrix.csv")
+
+#Posicion de las variables previamente descartadas
+posElim <- which(names(DataSet) %in% c(
+    "Aeropuerto.t",
+    "Atracadero.t",
+    "Ciudad.t" , 
+    "Industria.Minera.d",
+    "Laguna.t",
+    "Petroquimica.t" ,
+    "Pueblo.t",
+    "Puerto.t", 
+    "Refineria.t",
+    "Salina.d",
+    "Salina.t",
+    "Termoelectrica.t",
+    "Zona.Hipoxica.d",
+    "Zona.Hipoxica.t"
+))
+
+#Las eliminamos
+DataSet <- DataSet[-posElim]
+pos <- which(names(DataSet) == "Locality")
+
+#Removemos las que no seran evaluadas
+DataSet <- DataSet[c(140:433,pos)]
+sec <- 0:31*9
+
+```
+
+
+##Exploración  
+##Correlación de Spearman entre mínimos.
+
+Las variables MethaneDay.Min ,IncommingShortwave.Min y IncidentShortwave.Min serán removidas por no tener desviación.
+
+```{r cor1}
+g <- 1
+df <- DataSet[sec+g]
+cor1 <- as.data.frame(cor(df, method="spearman"))
+
+df <- df[!(names(df) %in% c("MethaneDay.Min","IncommingShortwave.Min",
+                            "IncidentShortwave.Min"))]
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor1
+
+```
+
+```{r resu1}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+
+```{r cortest1}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor1}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))     
+
+```
+
+
+```{r testin1}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names1}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain1}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:nrow(dfGraph)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+##Exploración  
+##Correlación de Spearman entre Q1's.
+
+Las variable SSTemperatureNight.Q1 será removida por no tener desviación.
+
+```{r cor2}
+g <- 2
+df <- DataSet[sec+g]
+cor2 <- as.data.frame(cor(df, method="spearman"))
+df <- df[!(names(df) %in% c("SSTemperatureNight.Q1"))]
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor2
+
+```
+
+```{r resu2}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest2}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+ 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor2}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin2}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names2}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain2}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Medianas.
+
+Las variable CarbonDioxide.Median será removida por no tener desviación.
+
+
+```{r cor3}
+g <- 3
+df <- DataSet[sec+g]
+cor3 <- as.data.frame(cor(df, method="spearman"))
+df <- df[!(names(df) %in% c("CarbonDioxide.Median"))]
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor3
+
+```
+
+```{r resu3}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest3}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+ 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor3}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+```{r testin3}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names3}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain3}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Medias.
+
+
+```{r cor4}
+g <- 4
+df <- DataSet[sec+g]
+cor4 <- as.data.frame(cor(df, method="spearman"))
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor4
+
+```
+
+```{r resu4}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest4}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor4}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin4}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names4}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain4}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Q3's.
+
+Las variable CarbonDioxide.Q3 será removida por no tener desviación.
+
+```{r cor5}
+g <- 5
+df <- DataSet[sec+g]
+cor5 <- as.data.frame(cor(df, method="spearman"))
+
+df <- df[!(names(df) %in% c("CarbonDioxide.Q3"))]
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor5
+
+```
+
+```{r resu5}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest5}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+ 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor5}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin5}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names5}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain5}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Máximos.
+
+Las variables UpwellingLongwave.Max ,CarbonDioxide.Max y SSTemperatureNight.Max serán removidas por no tener desviación.
+
+```{r cor6}
+g <- 6
+df <- DataSet[sec+g]
+cor6 <- as.data.frame(cor(df, method="spearman"))
+
+df <- df[!(names(df) %in% c("UpwellingLongwave.Max","CarbonDioxide.Max",
+                            "SSTemperatureNight.Max"))]
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor6
+
+```
+
+```{r resu6}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest6}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor6}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin6}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names6}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain6}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Desviaciones.
+
+```{r cor7}
+g <- 7
+df <- DataSet[sec+g]
+cor7 <- as.data.frame(cor(df, method="spearman"))
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor7
+
+```
+
+```{r resu7}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+
+```{r cortest7}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor7}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin7}
+#Test de de independencia de Hoeffding.
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names7}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain7}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Curtosis.
+
+```{r cor8}
+g <- 8
+df <- DataSet[sec+g]
+cor8 <- as.data.frame(cor(df, method="spearman"))
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor8
+
+```
+
+```{r resu8}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest8}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor8}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+```{r testin8}
+#Test de de independencia de Hoeffding. 
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+
+```{r names8}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain8}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+
+
+
+
+
+##Exploración  
+##Correlación de Spearman entre Asimetrías.
+
+```{r cor9}
+g <- 9
+df <- DataSet[sec+g]
+cor9 <- as.data.frame(cor(df, method="spearman"))
+
+tablaCor <- as.data.frame(cor(df, method="spearman"))	
+tablaTest <- tablaCor
+
+cor9
+
+```
+
+```{r resu9}
+
+for(i in 1:ncol(df)){
+    cat("\n")
+    print(names(df)[i])
+    print(summary(df[i][,1]))
+    cat("\n")
+} 
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r cortest9}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+ 
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor9}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+####Test de de independencia de Hoeffding. Método no paramétrico.
+
+Tabla de p-valores.  
+H0: Las variables son independientes.
+
+```{r testin9}
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+```{r names9}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain9}
+coln <- unname(sapply(coln,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+
+```
+
+#Relacion entre los descriptores de la corriente 
+
+```{r corriente}
+
+pairs.panels(DataSet[,289:294],bg = DataSet$Locality,pch = 21,
+             method = "spearman",
+             cex = 2,cex.cor=1)
+
+```
+
+
+## Correlaciones promedio entre las variables.
+
+Las correlaciones entre los descriptores de cada variable fueron promediados para generar este resultado. 
+
+```{r totalcor}
+
+#Inicializamos
+fils <- 1:nrow(cor1)
+cols <- 1:ncol(cor1)
+matCor <- cor1
+
+#Editamos nombres
+rownames(matCor) <- sapply(rownames(matCor),function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+})
+
+names(matCor) <- sapply(names(matCor),function(text){
+    text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+})
+#Ciclo
+proc1 <- unname(sapply(cols,function(c){
+    proc2 <- unname(sapply(fils,function(f){
+         matCor[f,c] <<- mean(c(cor1[f,c],cor2[f,c],cor3[f,c],cor4[f,c],
+                              cor5[f,c],cor6[f,c],cor7[f,c],cor8[f,c],
+                              cor9[f,c]),na.rm = TRUE)
+         return(NULL)
+    }))
+    return(NULL)
+}))
+tablaTest <- matCor
+matCor  
+
+```
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+```{r totalcorN}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+vars
+
+```
+
+###Pares de variables con correlación entre 0.4 y 0.5.
+
+```{r totalcorN2}
+
+tablaTest <- matCor
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) >= 0.4 & abs(tablaTest) <= 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+vars
+
+```
+
+###Pares de variables con correlación entre 0.3 y 0.4.
+
+```{r totalcorN3}
+
+tablaTest <- matCor
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) >= 0.3 & abs(tablaTest) < 0.4
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+vars
+
+```
+
+##Descarte de Predictores
+
+Presentaremos una lista de las variables ambientales que presentan las mayores correlaciones.
+
+```{r elim}
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/BenthicSubstrate_Matrix.csv")
+
+#Posicion de las variables de interes (Las Ambientales)
+
+ElimVars <- c(
+    "AbsorCoeffPhytoplank",     #AbsorCoeffNonAlgalMat
+    "AerosolAngstromExp",       #PhotosyntheticRadiation
+    "ChlorophyllaConcent",      #ParticOrganicCarbon
+    "ParticInorganicCarbon",    #PartiBackscatteringCoef  
+    "NormFluorescenceLH",       #ParticOrganicCarbon
+    "COChemicalProduction",     #SSTemperatureNight
+    "TwoMAirTemperature",       #SurfaceTempLandInclude
+    "AirTemperature",           #SurfaceTempLandInclude
+    "SO4SurfaceConcentration",  #SurfaceWindSpeed
+    "SO2SurfaceConcentration",  #SurfaceWindSpeed
+    "BlackCarbonSurface",       #SurfaceWindSpeed
+    "SurfaceSoilWetness",       #SurfaceWindSpeed
+    "IncommingShortwave",       #IncidentShortwave
+    "UpwellingLongwave",        #SurfaceWindSpeed
+    "SeaSaltColumnDensity",     #SeaSaltConcentration"
+    "PartiBackscatteringCoef",  #SeaSaltConcentration
+    "CarbonDioxide",
+    "RemoteReflectance",        #SSTemperatureNight
+    "TotalLatentEnergyFlux"     #SSTemperatureNight
+)
+
+posElim <- which(names(DataSet) %in% c(
+
+    "AbsorCoeffPhytoplank.Mean",     
+    "AbsorCoeffNonAlgalMat.Mean",
+    
+    "AerosolAngstromExp.Mean",       
+    "PhotosyntheticRadiation.Mean",
+    
+    "ChlorophyllaConcent.Mean",      
+    "ParticOrganicCarbon.Mean",
+    
+    "ParticInorganicCarbon.Mean",    
+    "PartiBackscatteringCoef.Mean",
+    
+    "NormFluorescenceLH.Mean",       
+    "ParticOrganicCarbon.Mean",
+    
+    "COChemicalProduction.Mean",     
+    "SSTemperatureNight.Mean",
+    
+    "TwoMAirTemperature.Mean",       
+    "SurfaceTempLandInclude.Mean",
+    
+    "AirTemperature.Mean",           
+    "SurfaceTempLandInclude.Mean",
+    
+    "SO4SurfaceConcentration.Mean",  
+    "SurfaceWindSpeed.Mean",
+    
+    "SO2SurfaceConcentration.Mean",  
+    "SurfaceWindSpeed.Mean",
+    
+    "BlackCarbonSurface.Mean",       
+    "SurfaceWindSpeed.Mean",
+    
+    "SurfaceSoilWetness.Mean",       
+    "SurfaceWindSpeed.Mean",
+    
+    "IncommingShortwave.Mean",       
+    "IncidentShortwave.Mean",
+    
+    "UpwellingLongwave.Mean",       
+    "SurfaceWindSpeed.Mean",
+    
+    "SeaSaltColumnDensity.Mean",      
+    "SeaSaltConcentration.Mean",
+
+    "PartiBackscatteringCoef.Mean",
+    "SeaSaltConcentration.Mean",
+
+    "RemoteReflectance.Mean",
+    "COChemicalProduction.Mean",
+    
+    "RemoteReflectance.Mean",
+    "SSTemperatureNight.Mean",
+    
+    "TotalLatentEnergyFlux.Mean",
+    "SSTemperatureNight.Mean"
+))
+
+pos <- which(names(DataSet) == "Locality")
+df <- DataSet[c(posElim,pos)]
+
+ElimVars
+
+```
+
+####Diagramas de dispersión de las variables señaladas.
+
+```{r elimplots,fig.width = 8,fig.height = 6}
+
+v1 <- c("AbsorCoeffPhytoplank.Mean","AbsorCoeffNonAlgalMat.Mean")
+v2 <- c("AerosolAngstromExp.Mean","PhotosyntheticRadiation.Mean")
+v3 <- c("ChlorophyllaConcent.Mean","ParticOrganicCarbon.Mean")
+v4 <- c("ParticInorganicCarbon.Mean","PartiBackscatteringCoef.Mean")
+v5 <- c("NormFluorescenceLH.Mean","ParticOrganicCarbon.Mean")
+v6 <- c("COChemicalProduction.Mean","SSTemperatureNight.Mean")
+v7 <- c("TwoMAirTemperature.Mean","SurfaceTempLandInclude.Mean")
+v8 <- c("AirTemperature.Mean","SurfaceTempLandInclude.Mean")
+v9 <- c("SO4SurfaceConcentration.Mean","SurfaceWindSpeed.Mean")
+v10 <- c("SO2SurfaceConcentration.Mean","SurfaceWindSpeed.Mean")
+v11 <- c("BlackCarbonSurface.Mean","SurfaceWindSpeed.Mean")
+v12 <- c("SurfaceSoilWetness.Mean","SurfaceWindSpeed.Mean")
+v13 <- c("IncommingShortwave.Mean","IncidentShortwave.Mean")
+v14 <- c("UpwellingLongwave.Mean","SurfaceWindSpeed.Mean")
+v15 <- c("SeaSaltColumnDensity.Mean","SeaSaltConcentration.Mean")
+v16 <- c("PartiBackscatteringCoef.Mean","SeaSaltConcentration.Mean")
+v17 <- c("RemoteReflectance.Mean","SSTemperatureNight.Mean")
+v18 <- c("TotalLatentEnergyFlux.Mean","SSTemperatureNight.Mean")
+
+kv1 <- c("AbsorCoeffPhytoplank")
+kv2 <- c("AerosolAngstromExp")
+kv3 <- c("ChlorophyllaConcent")
+kv4 <- c("ParticInorganicCarbon")
+kv5 <- c("NormFluorescenceLH")
+kv6 <- c("COChemicalProduction")
+kv7 <- c("TwoMAirTemperature")
+kv8 <- c("AirTemperature")
+kv9 <- c("SO4SurfaceConcentration")
+kv10 <- c("SO2SurfaceConcentration")
+kv11 <- c("BlackCarbonSurface")
+kv12 <- c("SurfaceSoilWetness")
+kv13 <- c("IncommingShortwave.")
+kv14 <- c("UpwellingLongwave")
+kv15 <- c("SeaSaltColumnDensity")
+kv16 <- c("PartiBackscatteringCoef")
+kv17 <- c("RemoteReflectance")
+kv18 <- c("TotalLatentEnergyFlux")
+
+df$Locality <- DataSet$Locality
+
+#Dispersion
+
+ggplot(df,aes(get(v1[1]),get(v1[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v1[1]) +
+    ylab(v1[2]) +
+    ggtitle(paste0("Removemos ",kv1[1]))
+
+ 
+ggplot(df,aes(get(v2[1]),get(v2[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v2[1]) +
+    ylab(v2[2]) +
+    ggtitle(paste0("Removemos ",kv2[1]))
+
+ggplot(df,aes(get(v3[1]),get(v3[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v3[1]) +
+    ylab(v3[2]) +
+    ggtitle(paste0("Removemos ",kv3[1]))
+
+ggplot(df,aes(get(v4[1]),get(v4[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v4[1]) +
+    ylab(v4[2]) +
+    ggtitle(paste0("Removemos ",kv4[1]))
+
+ggplot(df,aes(get(v5[1]),get(v5[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v5[1]) +
+    ylab(v5[2]) +
+    ggtitle(paste0("Removemos ",kv5[1]))
+
+ggplot(df,aes(get(v6[1]),get(v6[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v6[1]) +
+    ylab(v6[2]) +
+    ggtitle(paste0("Removemos ",kv6[1]))
+
+ggplot(df,aes(get(v7[1]),get(v7[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v7[1]) +
+    ylab(v7[2]) +
+    ggtitle(paste0("Removemos ",kv7[1]))
+
+ggplot(df,aes(get(v8[1]),get(v8[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v8[1]) +
+    ylab(v8[2]) +
+    ggtitle(paste0("Removemos ",kv8[1]))
+
+ggplot(df,aes(get(v9[1]),get(v9[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v9[1]) +
+    ylab(v9[2]) +
+    ggtitle(paste0("Removemos ",kv9[1]))
+
+ggplot(df,aes(get(v10[1]),get(v10[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v10[1]) +
+    ylab(v10[2]) +
+    ggtitle(paste0("Removemos ",kv10[1]))
+
+ggplot(df,aes(get(v11[1]),get(v11[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v11[1]) +
+    ylab(v11[2]) +
+    ggtitle(paste0("Removemos ",kv11[1]))
+
+ggplot(df,aes(get(v12[1]),get(v12[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v12[1]) +
+    ylab(v12[2]) +
+    ggtitle(paste0("Removemos ",kv12[1]))
+
+ggplot(df,aes(get(v13[1]),get(v13[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v13[1]) +
+    ylab(v13[2]) +
+    ggtitle(paste0("Removemos ",kv13[1]))
+
+ggplot(df,aes(get(v14[1]),get(v14[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v14[1]) +
+    ylab(v14[2]) +
+    ggtitle(paste0("Removemos ",kv14[1]))
+
+ggplot(df,aes(get(v15[1]),get(v15[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v15[1]) +
+    ylab(v15[2]) +
+    ggtitle(paste0("Removemos ",kv15[1]))
+
+ggplot(df,aes(get(v16[1]),get(v16[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v16[1]) +
+    ylab(v16[2]) +
+    ggtitle(paste0("Removemos ",kv16[1]))
+
+ggplot(df,aes(get(v17[1]),get(v17[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v17[1]) +
+    ylab(v17[2]) +
+    ggtitle(paste0("Removemos ",kv17[1]))
+
+ggplot(df,aes(get(v18[1]),get(v18[2]))) +
+    geom_point(size = 4,aes(col = Locality)) +
+    geom_smooth(method = "loess",se = F) +
+    geom_smooth(method = "rlm",se = F,col = "red") +
+    stat_ellipse() +
+    xlab(v18[1]) +
+    ylab(v18[2]) +
+    ggtitle(paste0("Removemos ",kv18[1]))
+
+df$Locality <-NULL
+
+```

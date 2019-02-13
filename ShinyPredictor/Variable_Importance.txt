@@ -1,0 +1,4 @@
+   RemoteReflectance.Mean  ChlorophyllaConcent.Mean 
+                 1498.356                  1414.184 
+SeaSaltColumnDensity.Mean     SSTemperatureDay.Mean 
+                 1327.682                  1216.637 

@@ -1,0 +1,608 @@
+n= 4090 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+    1) root 4090 3052 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.051 0.032 0.22 0.25 0.0051 0.048 0.16 0.088 0.082 0.065)  
+      2) SeaSaltColumnDensity.Mean>=15.12811 3523 2494 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.06 0.035 0.24 0.29 0.006 0.056 0.053 0.097 0.084 0.075)  
+        4) SeaSaltColumnDensity.Mean>=35.52028 1232  554 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.12 0.019 0.14 0.55 0.016 0.12 0 0.0057 0 0.024)  
+          8) RemoteReflectance.Mean>=1.001194 62    3 Boca Seca-Madriski-Mero (0.95 0 0 0 0.016 0.032 0 0 0 0) *
+          9) RemoteReflectance.Mean< 1.001194 1170  492 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.08 0.02 0.15 0.58 0.016 0.13 0 0.006 0 0.026)  
+           18) RemoteReflectance.Mean>=0.3394438 704  194 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.0043 0 0.21 0.72 0.027 0.038 0 0 0 0)  
+             36) RemoteReflectance.Mean>=0.5303518 334  150 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.009 0 0.39 0.55 0.048 0.006 0 0 0 0)  
+               72) SeaSaltColumnDensity.Mean< 37.1163 73   20 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.041 0 0.73 0.21 0.027 0 0 0 0 0)  
+                144) SeaSaltColumnDensity.Mean>=35.61939 68   15 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.044 0 0.78 0.15 0.029 0 0 0 0 0)  
+                  288) ChlorophyllaConcent.Mean< 38.09185 32    1 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.97 0 0.031 0 0 0 0 0) *
+                  289) ChlorophyllaConcent.Mean>=38.09185 36   14 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.083 0 0.61 0.28 0.028 0 0 0 0 0)  
+                    578) SSTemperatureDay.Mean>=25.60824 23    1 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.96 0 0.043 0 0 0 0 0) *
+                    579) SSTemperatureDay.Mean< 25.60824 13    3 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.23 0 0 0.77 0 0 0 0 0 0)  
+                     1158) RemoteReflectance.Mean>=0.8010464 3    0 Boca Seca-Madriski-Mero (1 0 0 0 0 0 0 0 0 0) *
+                     1159) RemoteReflectance.Mean< 0.8010464 10    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                145) SeaSaltColumnDensity.Mean< 35.61939 5    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+               73) SeaSaltColumnDensity.Mean>=37.1163 261   92 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.29 0.65 0.054 0.0077 0 0 0 0)  
+                146) RemoteReflectance.Mean< 0.6535751 138   70 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.49 0.49 0.0072 0.014 0 0 0 0)  
+                  292) SSTemperatureDay.Mean< 25.56951 114   47 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.59 0.39 0.0088 0.018 0 0 0 0)  
+                    584) SSTemperatureDay.Mean>=24.76832 59    7 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.88 0.068 0.017 0.034 0 0 0 0)  
+                     1168) SeaSaltColumnDensity.Mean< 46.94593 55    3 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.95 0 0.018 0.036 0 0 0 0)  
+                       2336) ChlorophyllaConcent.Mean< 121.1978 52    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                       2337) ChlorophyllaConcent.Mean>=121.1978 3    1 Norte-Rabuski-Medio (0 0 0 0 0.33 0.67 0 0 0 0) *
+                     1169) SeaSaltColumnDensity.Mean>=46.94593 4    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                    585) SSTemperatureDay.Mean< 24.76832 55   15 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.27 0.73 0 0 0 0 0 0)  
+                     1170) SeaSaltColumnDensity.Mean>=43.38899 19    4 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.79 0.21 0 0 0 0 0 0)  
+                       2340) ChlorophyllaConcent.Mean>=65.0401 15    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                       2341) ChlorophyllaConcent.Mean< 65.0401 4    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                     1171) SeaSaltColumnDensity.Mean< 43.38899 36    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                  293) SSTemperatureDay.Mean>=25.56951 24    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                147) RemoteReflectance.Mean>=0.6535751 123   22 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.073 0.82 0.11 0 0 0 0 0)  
+                  294) RemoteReflectance.Mean>=0.7548861 38   19 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.24 0.5 0.26 0 0 0 0 0)  
+                    588) RemoteReflectance.Mean< 0.7625476 9    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                    589) RemoteReflectance.Mean>=0.7625476 29   10 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.66 0.34 0 0 0 0 0)  
+                     1178) ChlorophyllaConcent.Mean< 56.73371 20    1 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.95 0.05 0 0 0 0 0) *
+                     1179) ChlorophyllaConcent.Mean>=56.73371 9    0 La Venada (0 0 0 0 1 0 0 0 0 0) *
+                  295) RemoteReflectance.Mean< 0.7548861 85    3 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.96 0.035 0 0 0 0 0) *
+             37) RemoteReflectance.Mean< 0.5303518 370   44 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.043 0.88 0.0081 0.068 0 0 0 0)  
+               74) SSTemperatureDay.Mean< 24.62643 19    3 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.84 0 0.16 0 0 0 0 0)  
+                148) ChlorophyllaConcent.Mean< 176.6154 16    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                149) ChlorophyllaConcent.Mean>=176.6154 3    0 La Venada (0 0 0 0 1 0 0 0 0 0) *
+               75) SSTemperatureDay.Mean>=24.62643 351   25 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.93 0 0.071 0 0 0 0)  
+                150) ChlorophyllaConcent.Mean< 220.7877 330    8 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.98 0 0.024 0 0 0 0)  
+                  300) ChlorophyllaConcent.Mean< 203.7125 318    4 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.99 0 0.013 0 0 0 0) *
+                  301) ChlorophyllaConcent.Mean>=203.7125 12    4 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.67 0 0.33 0 0 0 0)  
+                    602) ChlorophyllaConcent.Mean>=209.6541 8    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                    603) ChlorophyllaConcent.Mean< 209.6541 4    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                151) ChlorophyllaConcent.Mean>=220.7877 21    4 Norte-Rabuski-Medio (0 0 0 0.19 0 0.81 0 0 0 0)  
+                  302) SSTemperatureDay.Mean>=25.54653 4    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                  303) SSTemperatureDay.Mean< 25.54653 17    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+           19) RemoteReflectance.Mean< 0.3394438 466  298 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.2 0.049 0.058 0.36 0 0.26 0 0.015 0 0.064)  
+             38) SSTemperatureDay.Mean>=25.52824 134   15 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.11 0.89 0 0 0 0 0 0)  
+               76) ChlorophyllaConcent.Mean>=498.3586 15    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+               77) ChlorophyllaConcent.Mean< 498.3586 119    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+             39) SSTemperatureDay.Mean< 25.52824 332  212 Norte-Rabuski-Medio (0.27 0.069 0.036 0.15 0 0.36 0 0.021 0 0.09)  
+               78) SSTemperatureDay.Mean>=24.81214 280  160 Norte-Rabuski-Medio (0.32 0 0.043 0.17 0 0.43 0 0.025 0 0.0036)  
+                156) RemoteReflectance.Mean>=0.1661314 158   67 Boca Seca-Madriski-Mero (0.58 0 0 0.095 0 0.32 0 0 0 0.0063)  
+                  312) ChlorophyllaConcent.Mean< 202.4932 127   36 Boca Seca-Madriski-Mero (0.72 0 0 0.087 0 0.2 0 0 0 0)  
+                    624) RemoteReflectance.Mean< 0.3302701 108   17 Boca Seca-Madriski-Mero (0.84 0 0 0.1 0 0.056 0 0 0 0)  
+                     1248) SeaSaltColumnDensity.Mean>=36.35839 92    6 Boca Seca-Madriski-Mero (0.93 0 0 0 0 0.065 0 0 0 0)  
+                       2496) ChlorophyllaConcent.Mean>=113.4183 89    3 Boca Seca-Madriski-Mero (0.97 0 0 0 0 0.034 0 0 0 0)  
+                         4992) SeaSaltColumnDensity.Mean>=38.47567 70    0 Boca Seca-Madriski-Mero (1 0 0 0 0 0 0 0 0 0) *
+                         4993) SeaSaltColumnDensity.Mean< 38.47567 19    3 Boca Seca-Madriski-Mero (0.84 0 0 0 0 0.16 0 0 0 0)  
+                           9986) RemoteReflectance.Mean< 0.2930384 16    0 Boca Seca-Madriski-Mero (1 0 0 0 0 0 0 0 0 0) *
+                           9987) RemoteReflectance.Mean>=0.2930384 3    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                       2497) ChlorophyllaConcent.Mean< 113.4183 3    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                     1249) SeaSaltColumnDensity.Mean< 36.35839 16    5 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.31 0 0 0.69 0 0 0 0 0 0)  
+                       2498) ChlorophyllaConcent.Mean>=173.5259 5    0 Boca Seca-Madriski-Mero (1 0 0 0 0 0 0 0 0 0) *
+                       2499) ChlorophyllaConcent.Mean< 173.5259 11    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                    625) RemoteReflectance.Mean>=0.3302701 19    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                  313) ChlorophyllaConcent.Mean>=202.4932 31    5 Norte-Rabuski-Medio (0 0 0 0.13 0 0.84 0 0 0 0.032)  
+                    626) RemoteReflectance.Mean< 0.2098856 5    1 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.8 0 0 0 0 0 0.2) *
+                    627) RemoteReflectance.Mean>=0.2098856 26    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                157) RemoteReflectance.Mean< 0.1661314 122   53 Norte-Rabuski-Medio (0 0 0.098 0.28 0 0.57 0 0.057 0 0)  
+                  314) RemoteReflectance.Mean>=0.06889451 58   24 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.16 0.59 0 0.26 0 0 0 0)  
+                    628) SeaSaltColumnDensity.Mean< 38.37766 39    5 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.87 0 0.13 0 0 0 0) *
+                    629) SeaSaltColumnDensity.Mean>=38.37766 19    9 Norte-Rabuski-Medio (0 0 0.47 0 0 0.53 0 0 0 0)  
+                     1258) ChlorophyllaConcent.Mean>=500.4397 9    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                     1259) ChlorophyllaConcent.Mean< 500.4397 10    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                  315) RemoteReflectance.Mean< 0.06889451 64   10 Norte-Rabuski-Medio (0 0 0.047 0 0 0.84 0 0.11 0 0)  
+                    630) ChlorophyllaConcent.Mean< 520.8836 54    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                    631) ChlorophyllaConcent.Mean>=520.8836 10    3 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0.3 0 0 0 0 0.7 0 0)  
+                     1262) RemoteReflectance.Mean>=0.03523082 3    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                     1263) RemoteReflectance.Mean< 0.03523082 7    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+               79) SSTemperatureDay.Mean< 24.81214 52   23 San Agustin-Carabela (0 0.44 0 0 0 0 0 0 0 0.56)  
+                158) RemoteReflectance.Mean< 0.04715055 34   11 Cominoto-La Pecha (0 0.68 0 0 0 0 0 0 0 0.32)  
+                  316) ChlorophyllaConcent.Mean< 418.1492 26    3 Cominoto-La Pecha (0 0.88 0 0 0 0 0 0 0 0.12)  
+                    632) SSTemperatureDay.Mean>=22.91729 22    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                    633) SSTemperatureDay.Mean< 22.91729 4    1 San Agustin-Carabela (0 0.25 0 0 0 0 0 0 0 0.75) *
+                  317) ChlorophyllaConcent.Mean>=418.1492 8    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                159) RemoteReflectance.Mean>=0.04715055 18    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+        5) SeaSaltColumnDensity.Mean< 35.52028 2291 1609 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.025 0.043 0.3 0.15 0.00044 0.021 0.082 0.15 0.13 0.1)  
+         10) RemoteReflectance.Mean>=0.5239695 359   98 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.12 0 0.73 0.14 0.0028 0.011 0 0 0 0)  
+           20) RemoteReflectance.Mean>=0.9352033 54   10 Boca Seca-Madriski-Mero (0.81 0 0 0.17 0.019 0 0 0 0 0)  
+             40) SeaSaltColumnDensity.Mean>=27.18635 45    1 Boca Seca-Madriski-Mero (0.98 0 0 0 0.022 0 0 0 0 0) *
+             41) SeaSaltColumnDensity.Mean< 27.18635 9    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+           21) RemoteReflectance.Mean< 0.9352033 305   44 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.86 0.13 0 0.013 0 0 0 0)  
+             42) SeaSaltColumnDensity.Mean>=26.51169 274   13 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.95 0.033 0 0.015 0 0 0 0)  
+               84) RemoteReflectance.Mean>=0.5875485 221    4 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.98 0 0 0.018 0 0 0 0) *
+               85) RemoteReflectance.Mean< 0.5875485 53    9 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.83 0.17 0 0 0 0 0 0)  
+                170) ChlorophyllaConcent.Mean< 98.69033 44    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                171) ChlorophyllaConcent.Mean>=98.69033 9    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+             43) SeaSaltColumnDensity.Mean< 26.51169 31    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+         11) RemoteReflectance.Mean< 0.5239695 1932 1511 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.0067 0.051 0.22 0.16 0 0.023 0.097 0.17 0.15 0.12)  
+           22) RemoteReflectance.Mean< 0.4102165 1743 1322 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0.0075 0.057 0.24 0.15 0 0.025 0.019 0.19 0.17 0.13)  
+             44) SeaSaltColumnDensity.Mean< 18.70852 435  174 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.011 0.6 0.17 0 0 0 0.09 0.13 0)  
+               88) ChlorophyllaConcent.Mean>=287.0919 367  106 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.014 0.71 0.2 0 0 0 0.079 0 0)  
+                176) SSTemperatureDay.Mean>=23.92692 338   77 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.015 0.77 0.21 0 0 0 0 0 0)  
+                  352) SSTemperatureDay.Mean< 24.74393 200    5 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.025 0.97 0 0 0 0 0 0 0)  
+                    704) ChlorophyllaConcent.Mean< 356.4754 5    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                    705) ChlorophyllaConcent.Mean>=356.4754 195    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                  353) SSTemperatureDay.Mean>=24.74393 138   66 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.48 0.52 0 0 0 0 0 0)  
+                    706) SSTemperatureDay.Mean>=25.19427 60    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                    707) SSTemperatureDay.Mean< 25.19427 78    6 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0.077 0.92 0 0 0 0 0 0)  
+                     1414) RemoteReflectance.Mean< 0.1415135 6    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                     1415) RemoteReflectance.Mean>=0.1415135 72    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                177) SSTemperatureDay.Mean< 23.92692 29    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+               89) ChlorophyllaConcent.Mean< 287.0919 68   10 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.15 0.85 0)  
+                178) RemoteReflectance.Mean< 0.2285085 21   10 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.48 0.52 0)  
+                  356) SSTemperatureDay.Mean< 24.64777 10    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                  357) SSTemperatureDay.Mean>=24.64777 11    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                179) RemoteReflectance.Mean>=0.2285085 47    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+             45) SeaSaltColumnDensity.Mean>=18.70852 1308 1014 Puerto Real-Gabarra-Punta Conejo-La Muerta (0.0099 0.072 0.12 0.15 0 0.033 0.025 0.22 0.18 0.18)  
+               90) SSTemperatureDay.Mean>=24.85335 571  373 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.023 0.007 0.11 0.35 0 0.075 0.0088 0.19 0.042 0.2)  
+                180) ChlorophyllaConcent.Mean< 723.0201 413  215 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.031 0.0097 0.034 0.48 0 0.1 0.012 0 0.058 0.27)  
+                  360) SSTemperatureDay.Mean< 25.32196 297  112 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.01 0.013 0 0.62 0 0.13 0.017 0 0.081 0.13)  
+                    720) RemoteReflectance.Mean>=0.0754599 265   80 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.011 0.015 0 0.7 0 0.023 0.019 0 0.091 0.14)  
+                     1440) ChlorophyllaConcent.Mean< 441.0257 227   42 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.013 0 0 0.81 0 0.026 0 0 0.084 0.062)  
+                       2880) SeaSaltColumnDensity.Mean>=21.37012 167   21 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.018 0 0 0.87 0 0.036 0 0 0 0.072)  
+                         5760) ChlorophyllaConcent.Mean>=119.6972 163   17 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.018 0 0 0.9 0 0.012 0 0 0 0.074)  
+                          11520) SSTemperatureDay.Mean>=25.2489 106    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                          11521) SSTemperatureDay.Mean< 25.2489 57   17 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.053 0 0 0.7 0 0.035 0 0 0 0.21)  
+                            23042) SeaSaltColumnDensity.Mean< 32.77313 48    8 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.83 0 0.042 0 0 0 0.12)  
+                              46084) ChlorophyllaConcent.Mean< 340.8605 31    2 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.94 0 0.065 0 0 0 0) *
+                              46085) ChlorophyllaConcent.Mean>=340.8605 17    6 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.65 0 0 0 0 0 0.35)  
+                                92170) ChlorophyllaConcent.Mean>=360.5775 13    2 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.85 0 0 0 0 0 0.15) *
+                                92171) ChlorophyllaConcent.Mean< 360.5775 4    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                            23043) SeaSaltColumnDensity.Mean>=32.77313 9    3 San Agustin-Carabela (0.33 0 0 0 0 0 0 0 0 0.67) *
+                         5761) ChlorophyllaConcent.Mean< 119.6972 4    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                       2881) SeaSaltColumnDensity.Mean< 21.37012 60   21 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.65 0 0 0 0 0.32 0.033)  
+                         5762) SSTemperatureDay.Mean< 24.99244 39    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                         5763) SSTemperatureDay.Mean>=24.99244 21    2 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 0.9 0.095) *
+                     1441) ChlorophyllaConcent.Mean>=441.0257 38   14 San Agustin-Carabela (0 0.11 0 0 0 0 0.13 0 0.13 0.63)  
+                       2882) SeaSaltColumnDensity.Mean>=22.58018 33    9 San Agustin-Carabela (0 0.12 0 0 0 0 0.15 0 0 0.73)  
+                         5764) SSTemperatureDay.Mean< 25.0813 7    2 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0.29 0 0 0 0 0.71 0 0 0) *
+                         5765) SSTemperatureDay.Mean>=25.0813 26    2 San Agustin-Carabela (0 0.077 0 0 0 0 0 0 0 0.92) *
+                       2883) SeaSaltColumnDensity.Mean< 22.58018 5    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                    721) RemoteReflectance.Mean< 0.0754599 32    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                  361) SSTemperatureDay.Mean>=25.32196 116   42 San Agustin-Carabela (0.086 0 0.12 0.11 0 0.043 0 0 0 0.64)  
+                    722) ChlorophyllaConcent.Mean< 293.4211 28   15 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0.36 0 0 0.46 0 0.18 0 0 0 0)  
+                     1444) ChlorophyllaConcent.Mean< 238.5221 15    5 Boca Seca-Madriski-Mero (0.67 0 0 0 0 0.33 0 0 0 0)  
+                       2888) ChlorophyllaConcent.Mean>=181.8882 10    0 Boca Seca-Madriski-Mero (1 0 0 0 0 0 0 0 0 0) *
+                       2889) ChlorophyllaConcent.Mean< 181.8882 5    0 Norte-Rabuski-Medio (0 0 0 0 0 1 0 0 0 0) *
+                     1445) ChlorophyllaConcent.Mean>=238.5221 13    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+                    723) ChlorophyllaConcent.Mean>=293.4211 88   14 San Agustin-Carabela (0 0 0.16 0 0 0 0 0 0 0.84)  
+                     1446) SeaSaltColumnDensity.Mean< 21.30018 21   10 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.52 0 0 0 0 0 0 0.48)  
+                       2892) ChlorophyllaConcent.Mean>=400.1482 11    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                       2893) ChlorophyllaConcent.Mean< 400.1482 10    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                     1447) SeaSaltColumnDensity.Mean>=21.30018 67    3 San Agustin-Carabela (0 0 0.045 0 0 0 0 0 0 0.96)  
+                       2894) RemoteReflectance.Mean< 0.1411057 23    3 San Agustin-Carabela (0 0 0.13 0 0 0 0 0 0 0.87)  
+                         5788) ChlorophyllaConcent.Mean< 505.1306 3    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                         5789) ChlorophyllaConcent.Mean>=505.1306 20    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                       2895) RemoteReflectance.Mean>=0.1411057 44    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                181) ChlorophyllaConcent.Mean>=723.0201 158   50 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0.3 0 0 0 0 0.68 0 0.013)  
+                  362) SSTemperatureDay.Mean>=25.74968 52    4 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.92 0 0 0 0 0.038 0 0.038) *
+                  363) SSTemperatureDay.Mean< 25.74968 106    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+               91) SSTemperatureDay.Mean< 24.85335 737  522 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0.12 0.13 0 0 0 0.038 0.25 0.29 0.16)  
+                182) RemoteReflectance.Mean< 0.268445 665  454 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0.14 0.14 0 0 0 0.027 0.28 0.32 0.11)  
+                  364) ChlorophyllaConcent.Mean>=264.5573 490  317 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0.14 0.18 0 0 0 0.029 0.16 0.35 0.14)  
+                    728) SSTemperatureDay.Mean>=23.77375 233  157 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.24 0.33 0 0 0 0.06 0.021 0.31 0.039)  
+                     1456) ChlorophyllaConcent.Mean< 475.2601 162   86 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.35 0.47 0 0 0 0.025 0.031 0.074 0.056)  
+                       2912) SeaSaltColumnDensity.Mean< 28.58882 110   34 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.16 0.69 0 0 0 0.036 0 0.11 0)  
+                         5824) RemoteReflectance.Mean< 0.1889283 86   14 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.14 0.84 0 0 0 0.023 0 0 0)  
+                          11648) ChlorophyllaConcent.Mean< 326.917 29   12 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.41 0.59 0 0 0 0 0 0 0)  
+                            23296) SSTemperatureDay.Mean>=24.01455 15    3 Cominoto-La Pecha (0 0.8 0.2 0 0 0 0 0 0 0) *
+                            23297) SSTemperatureDay.Mean< 24.01455 14    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                          11649) ChlorophyllaConcent.Mean>=326.917 57    2 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.96 0 0 0 0.035 0 0 0) *
+                         5825) RemoteReflectance.Mean>=0.1889283 24   12 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0.25 0.17 0 0 0 0.083 0 0.5 0)  
+                          11650) SSTemperatureDay.Mean>=24.0469 12    6 Cominoto-La Pecha (0 0.5 0.33 0 0 0 0.17 0 0 0)  
+                            23300) RemoteReflectance.Mean< 0.217467 6    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                            23301) RemoteReflectance.Mean>=0.217467 6    2 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.67 0 0 0 0.33 0 0 0) *
+                          11651) SSTemperatureDay.Mean< 24.0469 12    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                       2913) SeaSaltColumnDensity.Mean>=28.58882 52   14 Cominoto-La Pecha (0 0.73 0 0 0 0 0 0.096 0 0.17)  
+                         5826) ChlorophyllaConcent.Mean< 360.6097 43    5 Cominoto-La Pecha (0 0.88 0 0 0 0 0 0.12 0 0)  
+                          11652) RemoteReflectance.Mean>=0.06234057 38    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                          11653) RemoteReflectance.Mean< 0.06234057 5    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                         5827) ChlorophyllaConcent.Mean>=360.6097 9    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                     1457) ChlorophyllaConcent.Mean>=475.2601 71   10 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0.14 0 0.86 0)  
+                       2914) SeaSaltColumnDensity.Mean< 25.1327 13    3 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.77 0 0.23 0)  
+                         5828) SSTemperatureDay.Mean>=24.4792 10    0 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 1 0 0 0) *
+                         5829) SSTemperatureDay.Mean< 24.4792 3    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                       2915) SeaSaltColumnDensity.Mean>=25.1327 58    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                    729) SSTemperatureDay.Mean< 23.77375 257  157 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0.043 0.054 0 0 0 0 0.28 0.39 0.23)  
+                     1458) RemoteReflectance.Mean< 0.1688599 108   50 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.1 0.13 0 0 0 0 0.54 0.065 0.17)  
+                       2916) SeaSaltColumnDensity.Mean>=26.23689 50   32 San Agustin-Carabela (0 0.22 0.28 0 0 0 0 0 0.14 0.36)  
+                         5832) SeaSaltColumnDensity.Mean< 28.73678 14    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                         5833) SeaSaltColumnDensity.Mean>=28.73678 36   18 San Agustin-Carabela (0 0.31 0 0 0 0 0 0 0.19 0.5)  
+                          11666) RemoteReflectance.Mean< 0.07363038 11    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                          11667) RemoteReflectance.Mean>=0.07363038 25    7 San Agustin-Carabela (0 0 0 0 0 0 0 0 0.28 0.72)  
+                            23334) RemoteReflectance.Mean>=0.1484889 10    3 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 0.7 0.3)  
+                              46668) SSTemperatureDay.Mean>=23.53592 7    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                              46669) SSTemperatureDay.Mean< 23.53592 3    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                            23335) RemoteReflectance.Mean< 0.1484889 15    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                       2917) SeaSaltColumnDensity.Mean< 26.23689 58    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                     1459) RemoteReflectance.Mean>=0.1688599 149   56 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.1 0.62 0.28)  
+                       2918) SeaSaltColumnDensity.Mean< 25.94554 61    5 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.082 0.92 0)  
+                         5836) SeaSaltColumnDensity.Mean< 21.47294 3    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                         5837) SeaSaltColumnDensity.Mean>=21.47294 58    2 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.034 0.97 0) *
+                       2919) SeaSaltColumnDensity.Mean>=25.94554 88   47 San Agustin-Carabela (0 0 0 0 0 0 0 0.11 0.42 0.47)  
+                         5838) ChlorophyllaConcent.Mean< 332.6365 36   12 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0.28 0.67 0.056)  
+                          11676) SSTemperatureDay.Mean>=23.48859 12    2 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 0.83 0 0.17) *
+                          11677) SSTemperatureDay.Mean< 23.48859 24    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                         5839) ChlorophyllaConcent.Mean>=332.6365 52   13 San Agustin-Carabela (0 0 0 0 0 0 0 0 0.25 0.75)  
+                          11678) ChlorophyllaConcent.Mean>=401.4848 20    7 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 0.65 0.35)  
+                            23356) SSTemperatureDay.Mean>=23.52029 14    1 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 0.93 0.071) *
+                            23357) SSTemperatureDay.Mean< 23.52029 6    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                          11679) ChlorophyllaConcent.Mean< 401.4848 32    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                  365) ChlorophyllaConcent.Mean< 264.5573 175   67 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.13 0 0 0 0 0.023 0.62 0.22 0.011)  
+                    730) SSTemperatureDay.Mean>=23.67311 137   29 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.17 0 0 0 0 0.029 0.79 0 0.015)  
+                     1460) ChlorophyllaConcent.Mean>=235.6245 75   29 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.31 0 0 0 0 0.053 0.61 0 0.027)  
+                       2920) RemoteReflectance.Mean>=0.1743306 15    2 Cominoto-La Pecha (0 0.87 0 0 0 0 0 0 0 0.13) *
+                       2921) RemoteReflectance.Mean< 0.1743306 60   14 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.17 0 0 0 0 0.067 0.77 0 0)  
+                         5842) SSTemperatureDay.Mean< 24.20598 25   13 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.36 0 0 0 0 0.16 0.48 0 0)  
+                          11684) ChlorophyllaConcent.Mean< 263.8904 13    4 Cominoto-La Pecha (0 0.69 0 0 0 0 0.31 0 0 0)  
+                            23368) SeaSaltColumnDensity.Mean>=24.26552 9    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+                            23369) SeaSaltColumnDensity.Mean< 24.26552 4    0 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 1 0 0 0) *
+                          11685) ChlorophyllaConcent.Mean>=263.8904 12    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                         5843) SSTemperatureDay.Mean>=24.20598 35    1 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.029 0 0 0 0 0 0.97 0 0) *
+                     1461) ChlorophyllaConcent.Mean< 235.6245 62    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+                    731) SSTemperatureDay.Mean< 23.67311 38    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+                183) RemoteReflectance.Mean>=0.268445 72   22 San Agustin-Carabela (0 0 0.11 0 0 0 0.14 0 0.056 0.69)  
+                  366) SeaSaltColumnDensity.Mean< 23.25474 7    0 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 1 0 0 0) *
+                  367) SeaSaltColumnDensity.Mean>=23.25474 65   15 San Agustin-Carabela (0 0 0.12 0 0 0 0.046 0 0.062 0.77)  
+                    734) ChlorophyllaConcent.Mean>=174.3916 61   11 San Agustin-Carabela (0 0 0.13 0 0 0 0.049 0 0 0.82)  
+                     1468) SSTemperatureDay.Mean>=24.17406 20   11 San Agustin-Carabela (0 0 0.4 0 0 0 0.15 0 0 0.45)  
+                       2936) RemoteReflectance.Mean< 0.2907654 8    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+                       2937) RemoteReflectance.Mean>=0.2907654 12    3 San Agustin-Carabela (0 0 0 0 0 0 0.25 0 0 0.75)  
+                         5874) ChlorophyllaConcent.Mean>=348.1272 3    0 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 1 0 0 0) *
+                         5875) ChlorophyllaConcent.Mean< 348.1272 9    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                     1469) SSTemperatureDay.Mean< 24.17406 41    0 San Agustin-Carabela (0 0 0 0 0 0 0 0 0 1) *
+                    735) ChlorophyllaConcent.Mean< 174.3916 4    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+           23) RemoteReflectance.Mean>=0.4102165 189   34 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0.17 0 0.011 0.82 0 0 0)  
+             46) ChlorophyllaConcent.Mean>=197.5101 32    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+             47) ChlorophyllaConcent.Mean< 197.5101 157    2 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0.013 0.99 0 0 0) *
+      3) SeaSaltColumnDensity.Mean< 15.12811 567  121 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0.016 0.079 0.016 0 0 0.79 0.034 0.069 0)  
+        6) ChlorophyllaConcent.Mean>=152.8901 85   40 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0.11 0.53 0.11 0 0 0 0.22 0.035 0)  
+         12) ChlorophyllaConcent.Mean>=476.0376 51    6 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 0.88 0.12 0 0 0 0 0 0)  
+           24) RemoteReflectance.Mean< 0.1792176 45    0 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata (0 0 1 0 0 0 0 0 0 0) *
+           25) RemoteReflectance.Mean>=0.1792176 6    0 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 1 0 0 0 0 0 0) *
+         13) ChlorophyllaConcent.Mean< 476.0376 34   15 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0.26 0 0.088 0 0 0 0.56 0.088 0)  
+           26) RemoteReflectance.Mean>=0.2220982 15    6 Cominoto-La Pecha (0 0.6 0 0.2 0 0 0 0 0.2 0)  
+             52) SSTemperatureDay.Mean< 24.67538 9    0 Cominoto-La Pecha (0 1 0 0 0 0 0 0 0 0) *
+             53) SSTemperatureDay.Mean>=24.67538 6    3 Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua (0 0 0 0.5 0 0 0 0 0.5 0) *
+           27) RemoteReflectance.Mean< 0.2220982 19    0 Puerto Real-Gabarra-Punta Conejo-La Muerta (0 0 0 0 0 0 0 1 0 0) *
+        7) ChlorophyllaConcent.Mean< 152.8901 482   36 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.93 0 0.075 0)  
+         14) RemoteReflectance.Mean>=0.3530883 364    0 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 1 0 0 0) *
+         15) RemoteReflectance.Mean< 0.3530883 118   36 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.69 0 0.31 0)  
+           30) ChlorophyllaConcent.Mean< 37.11405 69    2 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.97 0 0.029 0) *
+           31) ChlorophyllaConcent.Mean>=37.11405 49   15 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0.31 0 0.69 0)  
+             62) ChlorophyllaConcent.Mean>=40.41024 28   13 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.54 0 0.46 0)  
+              124) ChlorophyllaConcent.Mean< 74.24872 17    2 Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono (0 0 0 0 0 0 0.88 0 0.12 0) *
+              125) ChlorophyllaConcent.Mean>=74.24872 11    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+             63) ChlorophyllaConcent.Mean< 40.41024 21    0 Punta Cruz-Punta de Media Legua-Charagato-Blanca (0 0 0 0 0 0 0 0 1 0) *
+Confusion Matrix and Statistics
+
+                                                                     Reference
+Prediction                                                            Boca Seca-Madriski-Mero
+  Boca Seca-Madriski-Mero                                                                  63
+  Cominoto-La Pecha                                                                         0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                       0
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                          0
+  La Venada                                                                                 0
+  Norte-Rabuski-Medio                                                                       0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                   0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                          0
+  San Agustin-Carabela                                                                      0
+                                                                     Reference
+Prediction                                                            Cominoto-La Pecha
+  Boca Seca-Madriski-Mero                                                             0
+  Cominoto-La Pecha                                                                  42
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                 0
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                    0
+  La Venada                                                                           0
+  Norte-Rabuski-Medio                                                                 0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                             0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                          2
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                    0
+  San Agustin-Carabela                                                                1
+                                                                     Reference
+Prediction                                                            Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+  Boca Seca-Madriski-Mero                                                                                                               0
+  Cominoto-La Pecha                                                                                                                     1
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                                                                 167
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                                                                      0
+  La Venada                                                                                                                             0
+  Norte-Rabuski-Medio                                                                                                                   0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                                                               0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                                                            0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                                                                      0
+  San Agustin-Carabela                                                                                                                  0
+                                                                     Reference
+Prediction                                                            Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+  Boca Seca-Madriski-Mero                                                                                                            0
+  Cominoto-La Pecha                                                                                                                  0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                                                                0
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                                                                 195
+  La Venada                                                                                                                          0
+  Norte-Rabuski-Medio                                                                                                                0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                                                            0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                                                         0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                                                                   0
+  San Agustin-Carabela                                                                                                               0
+                                                                     Reference
+Prediction                                                            La Venada
+  Boca Seca-Madriski-Mero                                                     0
+  Cominoto-La Pecha                                                           0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata         1
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua            2
+  La Venada                                                                   3
+  Norte-Rabuski-Medio                                                         2
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                     0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                  0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                            0
+  San Agustin-Carabela                                                        0
+                                                                     Reference
+Prediction                                                            Norte-Rabuski-Medio
+  Boca Seca-Madriski-Mero                                                               1
+  Cominoto-La Pecha                                                                     0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                   2
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                      5
+  La Venada                                                                             0
+  Norte-Rabuski-Medio                                                                  47
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                               2
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                            0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                      0
+  San Agustin-Carabela                                                                  0
+                                                                     Reference
+Prediction                                                            Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+  Boca Seca-Madriski-Mero                                                                                                   0
+  Cominoto-La Pecha                                                                                                         0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                                                       2
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                                                          0
+  La Venada                                                                                                                 0
+  Norte-Rabuski-Medio                                                                                                       0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                                                 135
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                                                0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                                                          0
+  San Agustin-Carabela                                                                                                      0
+                                                                     Reference
+Prediction                                                            Puerto Real-Gabarra-Punta Conejo-La Muerta
+  Boca Seca-Madriski-Mero                                                                                      0
+  Cominoto-La Pecha                                                                                            0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                                          1
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                                             0
+  La Venada                                                                                                    0
+  Norte-Rabuski-Medio                                                                                          0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                                      0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                                  83
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                                             1
+  San Agustin-Carabela                                                                                         0
+                                                                     Reference
+Prediction                                                            Punta Cruz-Punta de Media Legua-Charagato-Blanca
+  Boca Seca-Madriski-Mero                                                                                            0
+  Cominoto-La Pecha                                                                                                  0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                                                0
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                                                   1
+  La Venada                                                                                                          0
+  Norte-Rabuski-Medio                                                                                                0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                                            2
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                                                         0
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                                                  78
+  San Agustin-Carabela                                                                                               0
+                                                                     Reference
+Prediction                                                            San Agustin-Carabela
+  Boca Seca-Madriski-Mero                                                                0
+  Cominoto-La Pecha                                                                      0
+  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata                    1
+  Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua                       1
+  La Venada                                                                              0
+  Norte-Rabuski-Medio                                                                    0
+  Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono                                0
+  Puerto Real-Gabarra-Punta Conejo-La Muerta                                             1
+  Punta Cruz-Punta de Media Legua-Charagato-Blanca                                       3
+  San Agustin-Carabela                                                                  86
+
+Overall Statistics
+                                          
+               Accuracy : 0.9656          
+                 95% CI : (0.9518, 0.9764)
+    No Information Rate : 0.2095          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.9602          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Boca Seca-Madriski-Mero
+Sensitivity                                 1.00000
+Specificity                                 0.99885
+Pos Pred Value                              0.98438
+Neg Pred Value                              1.00000
+Prevalence                                  0.06767
+Detection Rate                              0.06767
+Detection Prevalence                        0.06874
+Balanced Accuracy                           0.99942
+                     Class: Cominoto-La Pecha
+Sensitivity                           0.93333
+Specificity                           0.99887
+Pos Pred Value                        0.97674
+Neg Pred Value                        0.99662
+Prevalence                            0.04834
+Detection Rate                        0.04511
+Detection Prevalence                  0.04619
+Balanced Accuracy                     0.96610
+                     Class: Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+Sensitivity                                                                              0.9940
+Specificity                                                                              0.9908
+Pos Pred Value                                                                           0.9598
+Neg Pred Value                                                                           0.9987
+Prevalence                                                                               0.1805
+Detection Rate                                                                           0.1794
+Detection Prevalence                                                                     0.1869
+Balanced Accuracy                                                                        0.9924
+                     Class: Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+Sensitivity                                                                           1.0000
+Specificity                                                                           0.9878
+Pos Pred Value                                                                        0.9559
+Neg Pred Value                                                                        1.0000
+Prevalence                                                                            0.2095
+Detection Rate                                                                        0.2095
+Detection Prevalence                                                                  0.2191
+Balanced Accuracy                                                                     0.9939
+                     Class: La Venada
+Sensitivity                  0.375000
+Specificity                  1.000000
+Pos Pred Value               1.000000
+Neg Pred Value               0.994612
+Prevalence                   0.008593
+Detection Rate               0.003222
+Detection Prevalence         0.003222
+Balanced Accuracy            0.687500
+                     Class: Norte-Rabuski-Medio
+Sensitivity                             0.82456
+Specificity                             0.99771
+Pos Pred Value                          0.95918
+Neg Pred Value                          0.98866
+Prevalence                              0.06122
+Detection Rate                          0.05048
+Detection Prevalence                    0.05263
+Balanced Accuracy                       0.91114
+                     Class: Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+Sensitivity                                                                  0.9854
+Specificity                                                                  0.9950
+Pos Pred Value                                                               0.9712
+Neg Pred Value                                                               0.9975
+Prevalence                                                                   0.1472
+Detection Rate                                                               0.1450
+Detection Prevalence                                                         0.1493
+Balanced Accuracy                                                            0.9902
+                     Class: Puerto Real-Gabarra-Punta Conejo-La Muerta
+Sensitivity                                                    0.97647
+Specificity                                                    0.99645
+Pos Pred Value                                                 0.96512
+Neg Pred Value                                                 0.99763
+Prevalence                                                     0.09130
+Detection Rate                                                 0.08915
+Detection Prevalence                                           0.09237
+Balanced Accuracy                                              0.98646
+                     Class: Punta Cruz-Punta de Media Legua-Charagato-Blanca
+Sensitivity                                                          0.96296
+Specificity                                                          0.99529
+Pos Pred Value                                                       0.95122
+Neg Pred Value                                                       0.99647
+Prevalence                                                           0.08700
+Detection Rate                                                       0.08378
+Detection Prevalence                                                 0.08808
+Balanced Accuracy                                                    0.97913
+                     Class: San Agustin-Carabela
+Sensitivity                              0.93478
+Specificity                              0.99881
+Pos Pred Value                           0.98851
+Neg Pred Value                           0.99289
+Prevalence                               0.09882
+Detection Rate                           0.09237
+Detection Prevalence                     0.09345
+Balanced Accuracy                        0.96680
+[1] "----------------------------------------------------------"
+[1] "----------------------Evaluacion Final--------------------"
+[1] "----------------------------------------------------------"
+                   Real
+1             Garrapata
+2               Gabarra
+3           San Agustin
+4              Carabela
+5                Blanca
+6            Punta Cruz
+7       Cienaga interno
+8         Cienaga oeste
+9            Guabinitas
+10         Cienaga este
+11        Playa Tiburon
+12            Petaquire
+13           Punta Mono
+14             La Pared
+15          Media Legua
+16 Punta de Media Legua
+17                  Sur
+18                Medio
+19                Norte
+20            La Muerta
+21            Charagato
+22                 Mero
+23         Punta Conejo
+24            Boca Seca
+25          Bajo Caiman
+26             Sombrero
+27          Puerto Real
+28             La Pecha
+29             Cominoto
+30          Las Salinas
+31                 Cote
+32        Dos Mosquises
+33         Cayo de Agua
+34            La Venada
+35              Rabuski
+36             Madriski
+                                                            Prediccion
+1  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+2                           Puerto Real-Gabarra-Punta Conejo-La Muerta
+3                                                 San Agustin-Carabela
+4                                                 San Agustin-Carabela
+5                     Punta Cruz-Punta de Media Legua-Charagato-Blanca
+6                     Punta Cruz-Punta de Media Legua-Charagato-Blanca
+7  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+8  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+9  Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+10    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+11             Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+12             Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+13             Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+14             Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+15             Playa Tiburon-La Pared-Petaquire-Media Legua-Punta Mono
+16                    Punta Cruz-Punta de Media Legua-Charagato-Blanca
+17    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+18                                                 Norte-Rabuski-Medio
+19                                                 Norte-Rabuski-Medio
+20                          Puerto Real-Gabarra-Punta Conejo-La Muerta
+21                    Punta Cruz-Punta de Media Legua-Charagato-Blanca
+22                                             Boca Seca-Madriski-Mero
+23                          Puerto Real-Gabarra-Punta Conejo-La Muerta
+24                                             Boca Seca-Madriski-Mero
+25    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+26    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+27                          Puerto Real-Gabarra-Punta Conejo-La Muerta
+28                                                   Cominoto-La Pecha
+29                                                   Cominoto-La Pecha
+30 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+31 Cote-Guabinitas-Cienaga interno-Las Salinas-Cienaga oeste-Garrapata
+32    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+33    Dos Mosquises-Sur-Cienaga este-Bajo Caiman-Sombrero-Cayo de Agua
+34                                                           La Venada
+35                                                 Norte-Rabuski-Medio
+36                                             Boca Seca-Madriski-Mero
+   Acierto
+1     TRUE
+2     TRUE
+3     TRUE
+4     TRUE
+5     TRUE
+6     TRUE
+7     TRUE
+8     TRUE
+9     TRUE
+10    TRUE
+11    TRUE
+12    TRUE
+13    TRUE
+14    TRUE
+15    TRUE
+16    TRUE
+17    TRUE
+18    TRUE
+19    TRUE
+20    TRUE
+21    TRUE
+22    TRUE
+23    TRUE
+24    TRUE
+25    TRUE
+26    TRUE
+27    TRUE
+28    TRUE
+29    TRUE
+30    TRUE
+31    TRUE
+32    TRUE
+33    TRUE
+34    TRUE
+35    TRUE
+36    TRUE
+[1] "Porcentaje de aciertos: 100%"

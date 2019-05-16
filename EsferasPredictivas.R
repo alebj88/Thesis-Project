@@ -16,6 +16,12 @@ RadioPorDefecto <- TRUE
 RadioPorDefecto <- FALSE
 Radio <- 0.4      #Radio de las esferas (RadioPorDefecto == FALSE) 
 
+#Eliminacion para validacion 
+#Las variables aqui seleccionadas no generaran factores de correccion y 
+#sus valores ambientales son eliminados (NA).
+#RemoVars <- c("Petaquire")
+RemoVars <- NA
+
 #---------------------------------------
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -23,7 +29,6 @@ Radio <- 0.4      #Radio de las esferas (RadioPorDefecto == FALSE)
 DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/SCLESpecies_Matrix.csv")
 
 #Renombramos filas
-
 
 #Unimos objetos costeros
 DataSet$Afluente.Seco.d <- unname(apply(DataSet[c(
@@ -99,6 +104,14 @@ rownames(varespec) <- DataSet$Site
 #Variables ambientales
 varechem <- DataSet[c(48:ncol(DataSet))]
 rownames(varechem) <- DataSet$Site
+
+#RemoVars
+if(length(RemoVars) != 0){
+    RemoPos <- which(rownames(varechem) %in% RemoVars)
+    for (i in 1:length(RemoVars)){
+        varechem[RemoPos[i],] <- rep(NA,ncol(varechem))
+    }
+}
 
 #Entrenamos modelo NMDS
 set.seed(1234)
@@ -405,6 +418,14 @@ if(TresD == TRUE){
     }
 }
 
+#RemoVars
+if(length(RemoVars) != 0){
+    RemoPos <- which(DataSet$Site %in% RemoVars)
+    for (i in 1:length(RemoVars)){
+        corFactor[RemoPos[i],] <- rep(0,ncol(varechem))
+    }
+}
+
 #Correccion del factor de correccion por agrupamiento
 # if(solapada == TRUE){
 #     corFactor$EcoGroup <- rep(NA,nrow(corFactor))
@@ -510,7 +531,7 @@ proc <- apply(nube,1,function(p1){
 nube <- nube[complete.cases(nube),]
 nube$Nro <- NULL
 
-#Incremenamos valores en la nuve en caso de haber agrupaciones 
+#Incremenamos valores en la nube en caso de haber agrupaciones 
 valoresNE <- unique(nube$Eco)
 nube$EcoNG <- nube$Eco
 
@@ -736,6 +757,12 @@ unidos <- unidos[
      }))
 ,]
 
+#RemoVars
+if(length(RemoVars) != 0){
+    unidos <- unidos[complete.cases(unidos),]
+    rownames(unidos) <- 1:nrow(unidos)
+}
+
 #Preparamos el reentrenamiento de la APP
 setwd("~/Thesis Project AB/ShinyPredictor")
 
@@ -749,3 +776,8 @@ if("interpretador.RData" %in% dir()){
 tabla <- as.data.frame(table(unidos$Ecosystem))
 tabla <- tabla[c("Freq","Var1")]
 write.table(tabla,file="Frecuencias_del_Entrenador.txt",row.names = FALSE)
+
+rm(list = ls())
+gc()
+
+cat("Procedimiento finalizado.")

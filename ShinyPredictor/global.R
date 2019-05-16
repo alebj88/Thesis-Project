@@ -427,21 +427,21 @@ if(all(unique(entrenador$Ecosystem) %in% unique(bioDat1$Ecosystem)) == F){
 if(all(unique(entrenador$Ecosystem) %in% unique(AmbDat1$Ecosystem)) == F){
     stop("Los ecosistemas no coinciden. AmbDat1")
 }
-if(all(unique(bioDat4$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
-    stop("Los ecosistemas no coinciden. bioDat4-E")
-}
-if(all(unique(bioDat3$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
-    stop("Los ecosistemas no coinciden. bioDat3-E")
-}
-if(all(unique(bioDat2$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
-    stop("Los ecosistemas no coinciden. bioDat2-E")
-}
-if(all(unique(bioDat1$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
-    stop("Los ecosistemas no coinciden. bioDat1-E")
-}
-if(all(unique(AmbDat1$Ecosystem) %in% unique(entrenador$Ecosystem)) == FALSE){
-    stop("Los ecosistemas no coinciden. AmbDat1-E")
-}
+# if(all(unique(bioDat4$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
+#     stop("Los ecosistemas no coinciden. bioDat4-E")
+# }
+# if(all(unique(bioDat3$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
+#     stop("Los ecosistemas no coinciden. bioDat3-E")
+# }
+# if(all(unique(bioDat2$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
+#     stop("Los ecosistemas no coinciden. bioDat2-E")
+# }
+# if(all(unique(bioDat1$Ecosystem) %in% unique(entrenador$Ecosystem)) == F){
+#     stop("Los ecosistemas no coinciden. bioDat1-E")
+# }
+# if(all(unique(AmbDat1$Ecosystem) %in% unique(entrenador$Ecosystem)) == FALSE){
+#     stop("Los ecosistemas no coinciden. AmbDat1-E")
+# }
 
 #Unimos objetos costeros
 AmbDat1$Afluente.Seco.d <- unname(apply(AmbDat1[c(

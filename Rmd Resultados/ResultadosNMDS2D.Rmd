@@ -1,0 +1,942 @@
+---
+title:    "Resultados del Escalamiento Multidimensional No Métrico 2D"
+subtitle: "Modelo Bidimensional"
+author: "Alejandro Bravo. Carnet: 14-89834"
+date:   "10 de febrero de 2019"
+output: 
+    prettydoc::html_pretty:
+    theme: HPSTR
+highlight: github
+---
+    
+<style>
+    body {
+        text-align: justify}
+</style>
+    
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 8,fig.height = 8,fig.align ="center")
+knitr::opts_chunk$set(warning = FALSE)	
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(tidy = TRUE)
+library(knitr)
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+```
+
+#Resumen 
+
+El presente informe tiene como objetivo mostrar los principales resultados que se obtienen al aplicar un escalamiento multidimensional no métrico sobre los ecosistemas coralinos con índice de Kulczynski y 2 dimensiones. Se muestra el ajuste de las variables ambientales a la ordenación (influencias lineales y no lineales) y se presenta la metodología de simulación denominada Esferas de similitud. 
+
+Mediante el ajuste de los parámetros situados en las primeras lineas del código de este Markdown de R, distintas metodologías de simulación pueden ser aplicadas para estudiar su comportamiento visualmente.
+
+Una vez seccionada la estrategia de simulación a emplear, la misma debe ser configurada manualmente en el código "EsferasPredictivas.R" para generar la tabla de entrenamiento del modelo predictivo (entrenador.txt). Postarior a ello la misma debe ser validada mediante el script "ValidacionEsferas.Rmd".
+
+Al final de este informe se muestran algunos gráficos exploratorios de las variables ambientales que resultaron significativas tras el NMDS.
+
+```{r Ini}
+library(ggplot2)
+library(vegan) 
+library(dplyr)
+library(tidyr)
+library(nortest)
+
+#Selector de metodologia ESFERAS DE SIMILITUD-----------------------------------
+#Configurar igual que en el codigo 'EsferasPredictivas.R'. OBSERVACION!!!!!
+solapada <- FALSE  #Esferas tangentes sin agrupacion
+solapada <- TRUE   #Esferas solapadas con agrupacion
+
+nCent <- 10        #Numero de agrupaciones
+
+#Si solapada == TRUE--------------------
+RadioPorDefecto <- TRUE   
+RadioPorDefecto <- FALSE
+Radio <- 0.4      #Radio de las esferas (RadioPorDefecto == FALSE) 
+
+#IMportamos datos
+DataSet <- read.csv("~/Thesis Project AB/Data/Final Data/SCLESpecies_Matrix.csv")
+
+
+names(DataSet)[5] <- "Ac.cervicornis"            
+names(DataSet)[6] <- "Ac.palmata"                
+names(DataSet)[7] <- "Ma.mirabilis"              
+names(DataSet)[8] <- "Ma.sp"                     
+names(DataSet)[9] <- "Oc.diffusa"                 
+names(DataSet)[10] <- "Po.porites"                 
+names(DataSet)[11] <- "Po.sp"                      
+names(DataSet)[12] <- "Ag.sp"                     
+names(DataSet)[13] <- "Dic.stokesii"            
+names(DataSet)[14] <- "Me.meandrites"            
+names(DataSet)[15] <- "Po.astreoides"              
+names(DataSet)[16] <- "Ps.clivosa"          
+names(DataSet)[17] <- "Ps.strigosa"         
+names(DataSet)[18] <- "Other.Sc.plate"       
+names(DataSet)[19] <- "Ag.agaricites.danai"       
+names(DataSet)[20] <- "Ag.tenuifolia"             
+names(DataSet)[21] <- "Other.Sc.foliose"     
+names(DataSet)[22] <- "Ag.agaricites.agaricites"  
+names(DataSet)[23] <- "Ag.humilis"                
+names(DataSet)[24] <- "Co.natans"             
+names(DataSet)[25] <- "Dip.labyrinthiformis"       
+names(DataSet)[26] <- "Is.sp"                   
+names(DataSet)[27] <- "Me.sp"                    
+names(DataSet)[28] <- "Mo.cavernosa"            
+names(DataSet)[29] <- "Or.annularis"             
+names(DataSet)[30] <- "Or.faveolata"             
+names(DataSet)[31] <- "Or.franksi"               
+names(DataSet)[32] <- "Or.sp"                    
+names(DataSet)[33] <- "Po.branneri"                
+names(DataSet)[34] <- "Si.radians"             
+names(DataSet)[35] <- "Si.siderea"             
+names(DataSet)[36] <- "Si.sp"                  
+names(DataSet)[37] <- "So.sp"                  
+names(DataSet)[38] <- "St.intersepta"       
+names(DataSet)[39] <- "Other.Sc.massive"     
+names(DataSet)[40] <- "De.cylindrus"            
+names(DataSet)[41] <- "Mu.angulosa"                  
+names(DataSet)[42] <- "Other.Sc.solitary"    
+names(DataSet)[43] <- "Ma.decactis"               
+names(DataSet)[44] <- "Other.Sc.encrusting"  
+names(DataSet)[45] <- "Eu.fastigata"              
+names(DataSet)[46] <- "Other.Sc.flower.cup"  
+names(DataSet)[47] <- "Ps.sp" 
+
+#Renombramos filas
+
+#Unimos objetos costeros
+DataSet$Afluente.Seco.d <- unname(apply(DataSet[c(
+    "Quebrada.Seca.d","Rio.Seco.d")],1,function(x){
+        vect <- min(x,na.rm = T)
+        return(vect)
+    }))
+
+DataSet$Quebrada.Seca.d <- NULL
+DataSet$Rio.Seco.d <- NULL
+
+#Unimos objetos costeros
+DataSet$Petroleo.d <- unname(apply(DataSet[c(
+    "Termoelectrica.d","Refineria.d","Petroquimica.d")],1,function(x){
+        vect <- min(x,na.rm = T)
+        return(vect)
+    }))
+
+DataSet$Termoelectrica.d <- NULL
+DataSet$Refineria.d <- NULL
+DataSet$Petroquimica.d <- NULL
+
+#Unimos objetos costeros
+DataSet$Poblado.d <- unname(apply(DataSet[c(
+    "Pueblo.d","Ciudad.d")],1,function(x){
+        vect <- min(x,na.rm = T)
+        return(vect)
+    }))
+
+DataSet$Pueblo.d <- NULL
+DataSet$Ciudad.d <- NULL
+
+#Agregamos latitud y longitud como predictores 
+DataSet$Lat <- DataSet$latitude
+DataSet$Lon <- DataSet$longitude
+
+#Eliminamos variables colineales.
+posNoElim <- which(names(DataSet) %in% c(
+    "Laguna.d"                     ,"Puerto.d",                   
+    "Rio.d"                        ,"AbsorCoeffPhytoplank.Q3",     
+    "AbsorCoeffNonAlgalMat.Median" ,"ChlorophyllaConcent.Mean",    
+    "PhotosyntheticRadiation.Q3"   ,"RemoteReflectance.Mean",      
+    "SSTemperatureDay.Mean"        ,"SSTemperatureNight.Mean",     
+    "SSTemperatureNight.Kurtosis"  ,"SeaLevelPreassure.Skewness",  
+    "SeaSaltColumnDensity.Mean"    ,"SeaSaltColumnDensity.Sd",     
+    "TwoMAirTemperature.Mean"      ,"SeaSaltConcentration.Mean",   
+    "CarbonDioxide.Q1"             ,"CarbonDioxide.Skewness" ,     
+    "MethaneNight.Median"          ,"MethaneNight.Q3",             
+    "MethaneDay.Kurtosis"          ,"IncidentShortwave.Max",       
+    "IncommingShortwave.Max"       ,"speed.cm.s.min",              
+    "Afluente.Seco.d"              ,"Petroleo.d" ,                 
+    "Poblado.d"
+    
+))
+
+#Transformamos 999's en 120's en las variables de Google Earth
+for(k in c(50:75,370,371,372)){
+    DataSet[,k][DataSet[k][,1] == 999] <- rep(120,sum(DataSet[k][,1] == 999))
+}
+
+#Las eliminamos
+DataSet <- DataSet[c(1:47,posNoElim)]
+
+#Variables Biologicas
+varespec <- DataSet[c(5:47)]
+rownames(varespec) <- DataSet$Site
+
+#Variables ambientales
+varechem <- DataSet[c(48:ncol(DataSet))]
+rownames(varechem) <- DataSet$Site
+
+```
+
+##Medida de Disimilitud
+
+Seleccionamos la medida de disimilitud que mejor resalta las diferencias entre los ecosistemas estudiados maximizando la separación entre las variables ambientales. Se sabe que las características biológicas de los ecosistemas están caracterizadas por las condiciones del medio que los rodea.
+
+Los índices de Gower, Bray–Curtis, Jaccard and Kulczynski son buenos detectando gradientes ecológicos subyacentes (Faith et al. 1987), por ello estarán entre nuestras opciones.
+
+```{r Disim}
+indices <- c("manhattan", "euclidean", "canberra", "clark", "bray","kulczynski", "jaccard", "gower", "altGower", "morisita","horn", "mountford","raup","binomial","chao","cao","mahalanobis")
+
+rankindex(varechem,varespec,indices = indices)	
+
+```
+
+De la tabla podemos ver que el índice de disimilitud Kulczynski es en efecto el más adecuado por presentar la mayor correlación.
+
+##Dimensiones vs Stress
+
+Observando el gráfico y realizando la evaluación con la siguiente tabla determinaremos el número de dimensiones a usar.
+
+- Un stress mayor que 0.2    =>  Riesgos en interpretacion.
+- Un stress entre 0.1 y 0.2  =>  justo. Algunas distancias son erroneas.
+- Un stress entre 0.05 y 0.1 =>  Bueno. Inferencias confiables.
+- Un stress menor que 0.05   =>  Excelente.
+
+```{r Dim,fig.width = 8,fig.height = 8}
+
+#Funcion necesaria
+scree_values <- function(df,distance = distance,kmax = 6,trymax = 100){
+    set.seed(123456)
+    
+    df <- as.matrix(df)
+    scree.points <- NULL
+    for(i in 1:kmax){
+        sol.mds <- NULL
+        sol.mds <- replicate(10,metaMDS(df,distance = distance,trace = FALSE,
+                                        k = i,trymax = trymax)$stress, 
+                             simplify = TRUE)
+        scree.points <- append(scree.points,sol.mds)
+    }
+    return(scree.points)
+} 
+
+
+#Calculamos la relacion entre las dimensiones y el stress
+Stress <- scree_values(varespec,distance = "kulczynski",kmax = 6,
+                       trymax = 100) 
+Dimensions <- as.vector(sapply(1:(length(Stress)/10),function(x)
+    rep(x,10),simplify="vector"))
+
+dfgg <- data.frame(Dimensions = Dimensions,Stress = Stress)
+graph <- ggplot(dfgg,aes(Dimensions,Stress)) +
+    geom_point(size = 3) +
+    geom_line() +
+    ggtitle("Stress vs Dimensions") + 
+    geom_ribbon(aes(ymin=0.2,ymax=max(Stress,0.3)),fill="red",alpha=0.2) + 
+    geom_ribbon(aes(ymin=0.1,ymax=0.2),fill="yellow",alpha=0.2) + 
+    geom_ribbon(aes(ymin=0.05,ymax=0.1),fill="green",alpha=0.2) + 
+    geom_ribbon(aes(ymin=0,ymax=0.05),fill="blue",alpha=0.2) +
+    scale_x_continuous(breaks = 1:max(Dimensions))
+graph
+
+```
+
+Seleccionamos un total de 2 dimensiones.
+
+##Modelo NMDS
+
+Ejecutamos el escalamiento multidimensional no métrico usando la medida de disimilitud Kulczynski y un total de 2 dimensiones para generar la ordenación.
+
+```{r mod2i}
+set.seed(1234)
+nmds <- metaMDS(varespec,distance = "kulczynski",k = 2,
+                trace = FALSE,trymax = 100,tol = 1e-07)
+nmds
+
+```
+
+Observamos los predictores ambientales que serán empleados. Los mismos fueron previamente filtrados para mantener sólo los más representativos.
+
+```{r testSig2i}
+varechem <- varechem[!(names(varechem) %in% c("MethaneDay.Kurtosis",
+                                              "AbsorCoeffPhytoplank.Q3"))]
+varechemOcean <- varechem
+
+fit <- envfit(nmds,varechem,permutations=999, choices=c(1,2)) 
+fit
+```
+
+##Evaluación del NMDS mediante el Shepard Plot
+
+Gráfico de Shepard para la evaluación del ajuste mediante el stress. Diferencias entre las distancias en la ordenación y la disimilitud observada.
+
+
+```{r shep,fig.width = 8,fig.height = 8}
+stressplot(nmds, main = "Shepard Plot") 				
+
+```
+
+##Bondad del Ajuste
+
+### Visualización tridimensional de la ordenación
+
+```{r good,webgl=TRUE,fig.width = 8,fig.height = 8}
+
+gof <- goodness(nmds)
+max.gof <- max(gof)
+point.size <- 5 / max.gof
+sit.sc <- scores(nmds)  #Retorna los scores. Algo asi como la proyeccion de la nube de puntos sobre las componentes NMDS1 y NMDS2.
+
+##Agregamos "sitios"
+dfgg3 <- data.frame(NMDS1 = sit.sc[,1],NMDS2 = sit.sc[,2],
+                    varFac = DataSet$Locality,
+                    gof = ceiling(gof*point.size),
+                    Site = DataSet$Site)
+
+par3d(windowRect = c(20, 30, 50, 50))	#Resize window
+
+# legend3d("topright", legend = dfgg3$Site, pch = 16, col = rainbow(36),cex=0.7, inset=c(0.02),pt.cex = 2)
+
+plot3d(dfgg3$NMDS1, dfgg3$NMDS2, rep(0,nrow(dfgg3)), size = 2,col=rainbow(36),
+       xlab = "NMDS1", ylab = "NMDS2", zlab = "",type = "s",
+       main = "Goodness 2D")
+
+# Agregamos "species"
+dfspe <- as.data.frame(nmds$specie)
+dfspe$Label <- as.character(rownames(dfspe))
+
+text3d(dfspe$MDS1,dfspe$MDS2,rep(0,nrow(dfgg3)),dfspe$Label,cex = 0.7,
+       col = "red")
+text3d(dfgg3$NMDS1,dfgg3$NMDS2+0.2,(rep(0,nrow(dfgg3))),dfgg3$Site,cex = 0.7,
+       col = "black")
+
+
+```
+
+
+### Bondad de ajuste NMDS1 vs NMDS2 
+
+Presentamos ahora el gráfico de bondad de ajuste del algoritmo en cuestión.
+
+A mayor tamaño mejor fue la estabilidad del resultado en relación a las distintaas configuraciones iniciales del procedimiento.
+
+```{r good12}
+
+graph <- ggplot(dfgg3,aes(NMDS1,NMDS2,col = as.factor(varFac))) +
+    geom_point(aes(size = gof)) +
+    ggtitle("NMDS Goodness of Fit NMDS1 vs NMDS2") +
+    scale_color_discrete(name = "Locality") +
+    geom_text(dfgg3,mapping = aes(x=NMDS1,y=NMDS2,label=Site),
+              vjust=1.6,size=3,col = "black")
+
+graph <- graph +
+    geom_point(dfspe,mapping = aes(x=MDS1,y=MDS2),col = "red",shape = "X") +
+    geom_text(dfspe,mapping = aes(x=MDS1,y=MDS2,label=Label),
+              vjust=1.6,size=2,col = "red")
+
+graph
+
+```
+
+
+#Ajuste de variables ambientales a la ordenación final del NMDS.
+
+## Estudio de Influencias Lineales
+
+Presentaremos los gráficos biplot para mostrar la relación lineal entre las componentes de la ordenación y cada variable ambiental.
+
+###Biplots NMDS1 vs NMDS2
+
+Predictores con un p-valor de 0.1 o menos. 
+
+```{r Bi12_1}
+
+sit.sc <- as.data.frame(scores(nmds))
+col.group <- as.factor(DataSet$Locality)
+sumcols <- colSums(varespec)
+
+plot(nmds,dis ="sp",type = "n",main = "Biplot",ylim = c(-2,2))
+points(sit.sc[,1],sit.sc[,2],col = col.group,pch = 19,cex = 2)
+plot(fit,p.max = 0.1,axis = T,col="blue",cex = 0.7)		
+#Solo muestra las variables que son significantes.
+text(sit.sc[,-3],rownames(varespec),pos = 4, cex = 0.7)
+nmdsplot <- orditorp(nmds,display="sp",priority=sumcols,pch = "+",
+                     col = "red",choices = c(1,2))
+
+```
+
+
+## Estudio de Influencias No Lineales
+
+Presentaremos los gráficos ordisurf para mostrar la relaciones no lineales entre las componentes de la ordenación y cada variable ambiental.
+
+###Ordisurf NMDS1 vs NMDS2
+
+```{r ord1}
+
+for(i in 1:ncol(varechem)){
+    #https://rdrr.io/rforge/vegan/man/ordisurf.html
+    ## An anisotropic smoother with cubic regression spline with
+    ## shrinkage bases & different degrees of freedom in each dimension
+    ordisurf(nmds ~ get(names(varechem)[i]),data = varechem, 
+            plot = T, bubble = 6,main = names(varechem)[i],
+            isotropic = FALSE,bs = "cs", knots = c(3,4), fx = T, select = F,
+            choices = c(1, 2),ylim = c(-1.8,1.5),xlim = c(-1,1.2))
+    points(sit.sc[,1],sit.sc[,2],col = col.group,pch = 19,cex = 1.5)
+    text(sit.sc[,-3],as.character(DataSet$Site),pos = 4, cex = 0.7)
+    nmdsplot <- orditorp(nmds,display="sp",priority=sumcols,pch = "+",
+                         col = "red",choices = c(1, 2))
+    
+    fe <- envfit(nmds,varechem[i],permutations=999,choices = c(1,2)) 		  
+    fe
+    plot(fe)
+}
+
+```
+
+
+#Clasificación de los ecosistemas luego del NMDS.
+
+Con el objetivo de determinar la distribución de los arrecifes de coral en función de sus variables ambientales, y motivado a que la cantidad de datos es insuficiente para entrenar y validar un algoritmo de aprendizaje automático, se realizó una simulación de ecosistemas.
+
+Usando el conjunto de datos comunidades coralinas ordenadas tras el NMDS podemos definir regiones de similitud esféricas en torno a ellos, de forma que cualquier punto en su interior podría ser considerado como un ecosistema parecido al de su centro. De este modo bastaría con determinar las condiciones ambientales de cada esfera para hacer inferencia sobre las caracteristicas de las comunidades coralinas que las habitan, incluso sin tener datos reales sobre ellas.
+
+La agrupación de los ecosistemas en el espacio de ordenación se realiza mediante la asignacion de centroides aplicando el algoritmo K-medias.
+
+
+
+```{r CalculoRadio,fig.width = 8,fig.height = 8}
+
+#Extraemos
+sit.sc <- scores(nmds)  
+
+#Creamos dataFrame para las esferas, centro y radio.
+set.seed(987500)
+
+DataEsf <- data.frame(NMDS1 = sit.sc[,1],NMDS2 = sit.sc[,2])
+
+#Agrupamos por k-medias y recuperamos los centroides
+if(nCent < nrow(DataEsf)){
+    k <- kmeans(DataEsf[,1:2],centers = nCent, nstart=100) 
+}
+
+#Almacenamos los puntos de los ecosistemas en el espacio de ordenacion
+DataEcos <- DataEsf
+
+if(nCent < nrow(DataEsf)){
+    DataEsf <- as.data.frame(k$centers)
+    
+    #Almacenamos informacion sobre la agrupacion.
+    DataEcos$cluster <- as.factor(k$cluster)					
+    DataEsf$cluster <- rownames(DataEsf)
+}else{
+    DataEcos$cluster <- seq(1:nrow(DataEsf))					
+    DataEsf$cluster <- seq(1:nrow(DataEsf))
+}
+
+#Renombramos
+names(DataEcos)[c(1,2)] <- c("NMDS1_Ec","NMDS2_Ec")
+
+
+DataEcos$Ecos <- rownames(DataEcos)
+DataEcos <- merge(DataEcos,DataEsf,by = "cluster",all.x = TRUE)
+rownames(DataEcos) <- DataEcos$Ecos
+
+#Calculamos las distancias entre el punto y su respectivo centroide
+DataEcos$Dist <- apply(DataEcos[,-c(1,4)],1,function(v){
+    d <- sqrt((v[1]-v[3])^2 + (v[2]-v[4])^2)
+    return(d)
+})
+
+
+#Seleccion de la metodologia
+if(solapada == FALSE){
+ 
+    #Calculamos la matriz de distancias euclideas entre los puntos de la 
+    #ordenacion
+    dMat <- as.matrix(dist(DataEsf[-ncol(DataEsf)],method = "euclidean"))
+    diag(dMat) <- rep(10000,ncol(dMat))
+    
+    #Inicializamos radios
+    DataEsf$Radio <- rep(NA,nrow(DataEsf))
+    
+    #Calculamos los radios
+    repeat{
+        #Hallamos la columna que contiene al minimo
+        colMin <- which.min(apply(dMat,2,min))
+        
+        #Buscamos la fila donde esta ese minimo
+        filMin <- which.min(dMat[,colMin])
+        
+        #Check de salida
+        if(dMat[filMin,colMin] >= 5000){
+            break
+        }
+        
+        #Evaluamos la presencia de alguna esfera
+        if(is.na(DataEsf$Radio[colMin])){
+            #Agregamos radios
+            if(is.na(DataEsf$Radio[filMin])){
+                DataEsf$Radio[filMin] <- dMat[filMin,colMin]/2
+                DataEsf$Radio[colMin] <- dMat[filMin,colMin]/2
+                #Reducimos las otras distancias
+                # NAS <- is.na(DataEsf$Radio)
+                # dMat[NAS,filMin] <- dMat[NAS,filMin] - DataEsf$Radio[filMin]
+                # dMat[filMin,NAS] <- dMat[filMin,NAS] - DataEsf$Radio[filMin]
+                # dMat[NAS,colMin] <- dMat[NAS,colMin] - DataEsf$Radio[colMin]
+                # dMat[colMin,NAS] <- dMat[colMin,NAS] - DataEsf$Radio[colMin]
+                dMat[,filMin] <- dMat[,filMin] - DataEsf$Radio[filMin]
+                dMat[filMin,] <- dMat[filMin,] - DataEsf$Radio[filMin]
+                dMat[,colMin] <- dMat[,colMin] - DataEsf$Radio[colMin]
+                dMat[colMin,] <- dMat[colMin,] - DataEsf$Radio[colMin]
+                
+            }else{
+                DataEsf$Radio[colMin] <- dMat[filMin,colMin]
+                #Reducimos las otras distancias
+                # NAS <- is.na(DataEsf$Radio)
+                # dMat[NAS,colMin] <- dMat[NAS,colMin] - DataEsf$Radio[colMin]
+                # dMat[colMin,NAS] <- dMat[colMin,NAS] - DataEsf$Radio[colMin]
+                dMat[,colMin] <- dMat[,colMin] - DataEsf$Radio[colMin]
+                dMat[colMin,] <- dMat[colMin,] - DataEsf$Radio[colMin]
+            }
+            
+        }else{
+            if(is.na(DataEsf$Radio[filMin])){
+                DataEsf$Radio[filMin] <- dMat[filMin,colMin]
+                #Reducimos las otras distancias
+                # NAS <- is.na(DataEsf$Radio)
+                # dMat[NAS,filMin] <- dMat[NAS,filMin] - DataEsf$Radio[filMin]
+                # dMat[filMin,NAS] <- dMat[filMin,NAS] - DataEsf$Radio[filMin]
+                dMat[,filMin] <- dMat[,filMin] - DataEsf$Radio[filMin]
+                dMat[filMin,] <- dMat[filMin,] - DataEsf$Radio[filMin]
+            }
+            
+        }
+        #Colocamos 1000 en la posicion dada
+        dMat[filMin,colMin] <- 10000
+        dMat[colMin,filMin] <- 10000
+        
+    }
+       
+}else{
+    
+    #Hallamos la distancia maxima vista entre los centroides y sus puntos
+    if(RadioPorDefecto == TRUE){
+        maxima <- max(tapply(DataEcos$Dist,DataEcos$cluster,max)) + 0.01
+    }else{
+        maxima <- Radio
+    }
+
+    #Creamos los radios de las esferas de similitud
+    DataEsf$Radio <- rep(maxima,nrow(DataEsf))
+}
+
+#Renombramos filas
+DataEsf <- merge(DataEsf,DataEcos[c("cluster","Ecos")],
+                 by = "cluster",all.x = TRUE)
+
+t <- tapply(DataEsf$Ecos,DataEsf$cluster,paste0,collapse = "-")
+t <- sapply(DataEsf$cluster,function(x){unname(t[as.character(x)])})
+
+DataEsf$Ecos <- t
+DataEsf <- DataEsf %>% unique()
+rownames(DataEsf) <- DataEsf$Ecos
+
+#Eliminamos variables
+DataEsf$Ecos <- NULL
+DataEcos$Ecos <- NULL
+DataEsf$cluster <- NULL
+
+```
+
+### Visualización tridimensional de las esferas
+
+```{r Esferas,webgl=TRUE,fig.width = 8,fig.height = 8}
+
+if(solapada == TRUE){
+    par3d(windowRect = c(20, 30, 50, 50))	#Resize window
+
+    # legend3d("topright", legend = dfgg3$Site, pch = 16, col = rainbow(36),
+    #          cex=0.7, inset=c(0.02),pt.cex = 2)
+
+    plot3d(DataEcos$NMDS1, DataEcos$NMDS2, rep(0,nrow(DataEcos)), size = 2,
+           col=rainbow(36),xlab = "NMDS1", ylab = "NMDS2", zlab = "",
+           type = "s",main = "Goodness 2D")
+    
+    Sys.sleep(10) 
+}
+
+par3d(windowRect = c(20, 30, 50, 50))	#Resize window
+    
+rgl.spheres(DataEsf$NMDS1, DataEsf$NMDS2, rep(0,nrow(DataEsf)), 
+            radius = DataEsf$Radio,
+            col=rainbow(nCent))
+DataEsf
+
+```
+
+### Agrupacion de ecosistemas por k-medias.
+
+La selección del número óptimo de clusters a usar en el k-medias se determina mediante el método Elbow. Se debe elegir el valor de k para el cual su imagen en el gráfico marca el punto donde empieza a disminuir de forma considerable la tasa de decrecimiento.
+
+
+```{r elbow,fig.width = 8,fig.height = 6}
+
+#Elbow Method for finding the optimal number of clusters
+set.seed(4412344)
+# Compute and plot wss for k = 2 to k = 15.
+k.max <- 35
+data <- scale(as.matrix(dfgg3[c("NMDS1","NMDS2")]))
+wss <- sapply(1:k.max, 
+              function(k){kmeans(data, k, nstart=50,iter.max = 15 )$tot.withinss})
+wss
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     main= "Elbow Method",
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+
+```
+
+Evaluación de la estabilidad del algoritmo k medias frente a sus distintas configuraciones iniciales. Un resultado apropiado es aquel donde el orden de las palabras y su color asociado coinciden en las 5 columnas de texto.
+
+```{r kmedias}
+colores <- rainbow(nCent)
+
+dfgg3 <- data.frame(NMDS1 = sit.sc[,1],NMDS2 = sit.sc[,2],
+                    varFac = DataSet$Locality,
+                    Site = DataSet$Site)
+dfgg3$Ubicacion <- paste(dfgg3$varFac,dfgg3$Site,sep="-") 
+dfgg3$Ubicacion <- as.factor(dfgg3$Ubicacion)
+
+set.seed(987500)
+k1 <- kmeans(dfgg3[c("NMDS1","NMDS2")],centers=nCent, nstart=100)
+set.seed(2005027)
+k2 <- kmeans(dfgg3[c("NMDS1","NMDS2")],centers=nCent, nstart=100)
+set.seed(3005099)
+k3 <- kmeans(dfgg3[c("NMDS1","NMDS2")],centers=nCent, nstart=100)
+set.seed(4005070)
+k4 <- kmeans(dfgg3[c("NMDS1","NMDS2")],centers=nCent, nstart=100)
+set.seed(5005058)
+k5 <- kmeans(dfgg3[c("NMDS1","NMDS2")],centers=nCent, nstart=100)
+index <- 1:length(k1$cluster)
+
+for(i in 1 : nCent){
+    k1$cluster[which(k1$cluster == unique(k1$cluster)[i])] <- rep(
+        colores[i],times = sum(k1$cluster == unique(k1$cluster)[i])
+    )
+    k2$cluster[which(k2$cluster == unique(k2$cluster)[i])] <- rep(
+        colores[i],times = sum(k2$cluster == unique(k2$cluster)[i])
+    )
+    k3$cluster[which(k3$cluster == unique(k3$cluster)[i])] <- rep(
+        colores[i],times = sum(k3$cluster == unique(k3$cluster)[i])
+    )
+    k4$cluster[which(k4$cluster == unique(k4$cluster)[i])] <- rep(
+        colores[i],times = sum(k4$cluster == unique(k4$cluster)[i])
+    )
+    k5$cluster[which(k5$cluster == unique(k5$cluster)[i])] <- rep(
+        colores[i],times = sum(k5$cluster == unique(k5$cluster)[i])
+    )
+}
+
+plot(y = index,x = seq(0,6,length = length(index)),type = "n", 
+     main = "Evaluación del K-medias (10 Grupos)", xlab = "Inicio Aleatorio",
+     ylab = "Ecosistema")
+
+text(rep(1,length(index)),index,dfgg3$Ubicacion,col = k1$cluster, cex = 0.7)
+text(rep(2,length(index)),index,dfgg3$Ubicacion,col = k2$cluster, cex = 0.7)
+text(rep(3,length(index)),index,dfgg3$Ubicacion,col = k3$cluster, cex = 0.7)
+text(rep(4,length(index)),index,dfgg3$Ubicacion,col = k4$cluster, cex = 0.7)
+text(rep(5,length(index)),index,dfgg3$Ubicacion,col = k5$cluster, cex = 0.7)
+
+```
+
+Visualización de la ordenación
+
+```{r kmeansVisual,fig.width = 8,fig.height = 8}
+df <- dfgg3
+df$cluster <- as.factor(k$cluster)	
+centros <- as.data.frame(k$centers)
+
+g <- ggplot(data=df,aes(NMDS1, NMDS2,color=cluster)) +	
+    geom_point(size = 4) +
+    geom_point(data=centros,aes(NMDS1, NMDS2),color="blue",shape="X",
+               size = 6,alpha=1/3) +
+    ggtitle("Scatterplot with Clustering by K-means") +
+    geom_text(aes(label=df$Site),hjust=0.5,vjust=1.5,color="black",size=3)												
+g
+
+```
+
+
+# Estudio del ordenamiento con Clusterización Jerárquica.
+
+## Agrupación sobre los ecosistemas antes del NMDS coloreando en función de los resultados del k-medias.
+
+Para agrupar los ecosistemas coralinos por similitudes en el espacio original se clusterizó con vecino más lejano e índice de disimilitud de Kulczynski. 
+
+
+```{r cluster kulc,fig.width = 8,fig.height = 6}
+
+#Cambiamos paleta de colores.
+palette(rainbow(nCent))
+
+# Variables de dfgg3: NMDS1,NMDS2,NMDS3,varFac (locality),Site.
+dfgg3$gof <- NULL
+
+dfgg3$Ubicacion <- paste(dfgg3$varFac,dfgg3$Site,sep="-") 
+dfgg3$Ubicacion <- as.factor(dfgg3$Ubicacion)
+
+dfgg3$Site <- NULL
+
+rownames(dfgg3) <- unname(sapply(as.character(dfgg3$Ubicacion),function(text){
+    text <- strsplit(text,split="-")[[1]][2]
+    return(text)
+}))
+
+#Creamos coloracion por clusterizacion de k medias
+dfgg3$varFac <- sapply(rownames(dfgg3),function(txt){
+    for(i in 1:nrow(DataEsf)){
+        vect <- strsplit(rownames(DataEsf)[i],split = "-")[[1]]
+        if(txt %in% vect){
+            return(rownames(DataEsf)[i])
+        }
+    }
+})
+dfgg3$varFac <- as.factor(dfgg3$varFac)
+
+#Funcion myplclust.
+myplclust <- function(hclust,lab = hclust$labels,
+                      lab.col = rep(1,length(hclust$labels)),hang = 0.05,...){
+    y <- rep(hclust$height,2)
+    x <- as.numeric(hclust$merge)
+    y <- y[which(x<0)]
+    x <- x[which(x<0)]
+    x <- abs(x)
+    y <- y[order(x)]
+    x <- x[order(x)]
+    plot(hclust,labels = FALSE,hang=hang,...)
+    text(x = x,y = y[hclust$order]-(max(hclust$height)*hang),
+         labels = lab[hclust$order],
+         col = lab.col[hclust$order],srt = 90,adj = c(1,0.5),xpd = NA,...)
+}
+
+
+#Estandarizacion doble de wisconsin
+varespec2 <- wisconsin(varespec)
+
+#Matriz de distancias 
+d <- vegdist(varespec2,method = "kulczynski") 
+
+cluster2 <- hclust(d,method="complete")	
+myplclust(cluster2,lab.col = as.numeric(dfgg3$varFac),cex=0.9,
+          main = "Agrupación con Kulczinsky antes del NMDS")	
+rect.hclust(cluster2,k = nCent)
+
+
+```
+
+
+## Agrupación sobre los ecosistemas luego del NMDS coloreando en función de los resultados del k-medias.
+
+Para agrupar los ecosistemas coralinos por similitudes en el espacio de ordenamiento se clusterizó con vecino más lejano y distancia euclidea.
+
+
+```{r cluster,fig.width = 8,fig.height = 6}
+
+#Cluster jerarquico
+d <- dist(dfgg3[c("NMDS1","NMDS2")],method = "euclidean")
+
+cluster2 <- hclust(d,method="complete")	
+myplclust(cluster2,lab.col = as.numeric(dfgg3$varFac),cex=0.9,
+          main = "Agrupación con Distancia Euclidea después del NMDS")	
+rect.hclust(cluster2,k = nCent)
+
+```
+
+
+
+#Exploración de variables ambientales.
+
+##Relaciones entre variables ambientales
+
+Correlación de Spearman ntre predictores ambientales.
+
+```{r cor1}
+
+library(igraph)
+library(Hmisc)
+library(psych)
+
+tablaCor <- as.data.frame(cor(varechemOcean, method="spearman"))	
+tablaTest <- tablaCor
+
+tablaCor
+
+pairs.panels(varechemOcean[,1:12],bg = as.factor(rownames(varechemOcean)),
+             pch = 21,
+             method = "spearman",
+             cex = 2,cex.cor=1)
+
+pairs.panels(varechemOcean[,13:24],bg = as.factor(rownames(varechemOcean)),
+             pch = 21,
+             method = "spearman",
+             cex = 2,cex.cor=1)
+
+```
+
+
+###Pares de variables con correlación alta (mayor a 0.5).
+
+
+```{r cortest1}
+
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+tablaTest <- abs(tablaTest) > 0.5
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las correlaciones altas.
+
+```{r gracor1}
+coln <- unname(sapply(coln,function(text){
+    #text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    #text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:(nrow(dfGraph)-1)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Ploteamos
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+#plot(g1, edge.label = paste(E(g1)$weight, sep = ""))     
+plot(g1, edge.label = rep("",length(E(g1)$weight)))     
+
+```
+
+
+```{r testin1}
+#Test de de independencia de Hoeffding.
+df <- varechemOcean
+
+vect <- 1:ncol(df)
+
+#Procedimiento para hallar los p-valores
+for(i in 1:ncol(df)){
+    proc <- unname(sapply(vect,function(idx){
+        pvalor1 <- hoeffd(df[,i],df[,idx])$P[1,2]
+        pvalor2 <- hoeffd(df[,i],df[,idx])$P[2,1]
+        #Check de pvalores
+        if(pvalor1 != pvalor2){
+            stop("Resultado no esperado en hoeffd")
+        }
+        tablaCor[idx,i] <<- pvalor1
+        return(NULL)
+    })) 
+}
+tablaTest <- tablaCor
+#tablaCor
+
+```
+
+###Pares de variables independientes.
+
+Test de de independencia de Hoeffding. Método no paramétrico.
+
+```{r names1}
+#Ponemos 0 en la diagonal para que no sean impresos esos valores.
+for(i in 1:nrow(tablaTest)){
+    tablaTest[i,i] <- 0
+}
+
+tablaTest <- abs(tablaTest) > 0.05
+posTrue <- which(tablaTest == TRUE)
+coln <- rep(colnames(tablaTest),each = dim(tablaTest)[1])
+rown <- rep(rownames(tablaTest),times = dim(tablaTest)[1])
+
+#vars <- paste(coln[posTrue],rown[posTrue],sep = "  -  ")
+#vars
+
+```
+
+Grafo no dirigido para las variables independientes.
+
+```{r grain1}
+coln <- unname(sapply(coln,function(text){
+    #text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+rown <- unname(sapply(rown,function(text){
+    #text <- strsplit(text,split = "\\.")[[1]][1]
+    text
+}))
+
+#Grafo
+dfGraph <- data.frame(var1 = coln[posTrue], var2 = rown[posTrue],
+                      weight = tablaTest[posTrue]+0)
+
+#Removemos pares repetidos
+dfGraph$Elim <- rep("No",nrow(dfGraph))
+for(i in 1:nrow(dfGraph)){
+    #Evitamos eliminacion total
+    if(dfGraph$Elim[i] != "Elim"){
+        posR <- which(paste(dfGraph$var1,dfGraph$var2) %in% 
+                      paste(dfGraph$var2[i],dfGraph$var1[i]))
+        dfGraph$Elim[posR] <- "Elim"
+    }
+}
+#Check de salida
+if(sum(dfGraph$Elim == "Elim") != sum(dfGraph$Elim == "No")){
+    stop("Error en eliminacion")
+}
+dfGraph <- dfGraph[dfGraph$Elim != "Elim",]
+dfGraph$Elim <- NULL
+
+#Realizamos plot
+g1 <- graph.data.frame(dfGraph, directed = F) 
+igraph.options(plot.layout=layout.fruchterman.reingold, vertex.size=10,
+               vertex.color = "#04D7F7")
+
+#plot(g1, edge.label = paste(E(g1)$weight, sep = ""))   
+plot(g1, edge.label = rep("",length(E(g1)$weight)))     
+
+```
+
+
+
+

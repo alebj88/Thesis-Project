@@ -232,9 +232,9 @@ graph <- ggplot(dfgg,aes(Dimensions,Stress)) +
     geom_line() +
     ggtitle("Stress vs Dimensions") + 
     geom_ribbon(aes(ymin=0.2,ymax=max(Stress,0.3)),fill="red",alpha=0.2) + 
-    geom_ribbon(ymin=0.1,ymax=0.2,fill="yellow",alpha=0.2) + 
-    geom_ribbon(ymin=0.05,ymax=0.1,fill="green",alpha=0.2) + 
-    geom_ribbon(ymin=0,ymax=0.05,fill="blue",alpha=0.2) +
+    geom_ribbon(aes(ymin=0.1,ymax=0.2),fill="yellow",alpha=0.2) + 
+    geom_ribbon(aes(ymin=0.05,ymax=0.1),fill="green",alpha=0.2) + 
+    geom_ribbon(aes(ymin=0,ymax=0.05),fill="blue",alpha=0.2) +
     scale_x_continuous(breaks = 1:max(Dimensions))
 graph
 
